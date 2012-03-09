@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml">
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="shortcut icon" href="/static/images/favicon.ico" />
+    <link rel="stylesheet" href="/static/css/thedashboard/reset.css" />
+    <link rel="stylesheet" href="/static/css/thedashboard/hacks.css" />
+    <link rel="stylesheet" href="/static/css/thedashboard/base.css" />
+    <link rel="stylesheet" href="/static/css/lib/jquery-ui-vader.css"/>
+    <link rel="stylesheet" href="/static/css/thedashboard/site.css" />
+    <link rel="stylesheet" href="/static/css/lib/jscrollpane.css" />
+    <link rel="stylesheet" href="/static/css/lib/jqmodal.css" />
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/js/lib/d3.js"></script>
+    <script type="text/javascript" src="/static/js/lib/d3.layout.cloud.js"></script>
+    <script type="text/javascript" src="/static/js/lib/jquery.ui.min.js"></script>
+    <script type="text/javascript" src="/static/js/lib/jquery.templates.min.js"></script>
+    <script type="text/javascript" src="/static/js/lib/jquery.corner.js"></script>
+    <script type="text/javascript" src="/static/js/lib/jquery.mousewheel.js"></script>
+    <script type="text/javascript" src="/static/js/lib/jquery.em.js"></script>
+    <script type="text/javascript" src="/static/js/lib/jquery.jscrollpane.js"></script>
+    <script type="text/javascript" src="/static/js/lib/jquery.jqmodal.js"></script>
+    <script type="text/javascript" src="/static/js/thedashboard/header.js"></script>
+    <script type="text/javascript" src="/static/js/thedashboard/header_dashboard_name.js"></script>
+    <script type="text/javascript" src="/static/js/thedashboard/site.js"></script>
+    <script type="text/javascript" src="/static/js/thedashboard/dashboard_collection.js"></script>
+    <script type="text/javascript" src="/static/js/thedashboard/dashboard_search_widget.js"></script>
+    <script type="text/javascript" src="/static/js/thedashboard/dashboard_search_widget_data_points_and_actions.js"></script>
+    <script type="text/javascript" src="/static/js/thedashboard/dashboard_search_widget_control_panel.js"></script>
+    <script type="text/javascript" src="/static/js/thedashboard/dashboard_search_widget_search_filters.js"></script>
+    <script type="text/javascript" src="/static/js/thedashboard/dashboard_search_widget_search_results.js"></script>
+    <script type="text/javascript" src="/static/js/thedashboard/dashboard_search_widget_search_results_content_items.js"></script>
+    <script type="text/javascript" src="/static/js/thedashboard/dashboard_search_widget_unconfigured_data_point.js"></script>
+    <script type="text/javascript" src="/static/js/thedashboard/dashboard_search_widget_unconfigured_action.js"></script>
+    <script type="text/javascript" src="/static/js/thedashboard/dashboard.js"></script>
+    <script type="text/javascript" src="/static/js/thedashboard/dashboard_collections_panel.js"></script>
+    <script type="text/javascript" src="/static/js/thedashboard/dashboard_widget_panel.js"></script>
+    <script type="text/javascript" src="/static/js/thedashboard/dashboard_outputs.js"></script>
+    <script type="text/javascript" src="/static/js/thedashboard/dashboard_visualizations.js"></script>
+    <script type="text/javascript" src="/static/js/thedashboard/dashboard_visualization.js"></script>
+    <script type="text/javascript" src="/static/js/thedashboard/on_exit_modal.js"></script>
+    <script type="text/javascript" src="/static/js/thedashboard/modal_api_key_manager.js"></script>
+    <script type="text/javascript">
+        EMBEDDED_MODE = false;
+        var html_host = '{{ static_host }}';
+
+        $(document).ready
+            (
+                function()
+                {
+                    setTimeout
+                        (
+                            function()
+                            {
+                                var dashboard_id = '{{ dashboard_id }}';
+                                $.get
+                                    (
+                                        '/dashboard/load/' + dashboard_id,
+                                        function(data)
+                                        {
+                                            $('.dashboard').dashboard({'dashboard':data.dashboard});
+                                            $('.header').header({'dashboard':data.dashboard});
+                                            $('#on_exit_modal').on_exit_modal();
+                                        },
+                                        'JSON'
+                                    );
+                            },
+                            100
+                        );
+                }
+            )
+    </script>
+    <script type="text/javascript" src="/static/js/thedashboard/init.js"></script>
+</head>
+<body data-username='{{ user.username }}' class="{% block body_class %}{% endblock %}">
+    <form id='csrf_form'>
+        {% csrf_token %}
+    </form>
+    {% include 'thedashboard/header/header.html' with context='dashboard' %}
+    <div id="page_container">
+        <div id='page' data-username='{{ user.username }}'>
+            <div id='content'>
+                <div class="dashboard">
+                    <h3 class="title">Gain new insight</h3>
+                    <div class='widgets'></div>
+                    <div class='collections clearfix'>
+                        <p class="waiting">Loading <img src="/static/images/thedashboard/loading_circle_on_white.gif" /></p>
+                    </div>
+                </div>
+            </div>
+            <div class="hidden">
+                <img src="/static/images/thedashboard/icon_clock.png" width='1px' height="1px" />
+                <img src="/static/images/thedashboard/icon_clock_loading.gif" width='1px' height="1px" />
+                <img src="/static/images/thedashboard/icon_config.png" width='1px' height="1px" />
+                <img src="/static/images/thedashboard/icon_cross.png" width='1px' height="1px" />
+                <img src="/static/images/thedashboard/icon_publish.png" width='1px' height="1px" />
+                <img src="/static/images/thedashboard/icon_search.png" width='1px' height="1px" />
+                <img src="/static/images/thedashboard/data_points/feed_small.png" width='1px' height="1px" />
+                <img src="/static/images/thedashboard/data_points/googlenews_small.png" width='1px' height="1px" />
+                <img src="/static/images/thedashboard/data_points/googleplus_small.png" width='1px' height="1px" />
+                <img src="/static/images/thedashboard/data_points/twitter_small.png" width='1px' height="1px" />
+                <img src="/static/images/thedashboard/actions/sentiment_small.png" width='1px' height="1px" />
+                <img src="/static/images/thedashboard/actions/location_small.png" width='1px' height="1px" />
+                <img src="/static/images/thedashboard/actions/language_small.png" width='1px' height="1px" />
+                <img src="/static/images/thedashboard/actions/tagging_small.png" width='1px' height="1px" />
+
+            </div>
+            {% include 'thedashboard/modals/on_exit.html' %}
+            {% include 'thedashboard/modals/api_key_manager.html' %}
+        </div>
+    </div>
+    {% include 'ga_tracking.html' %}
+</body>
+</html>

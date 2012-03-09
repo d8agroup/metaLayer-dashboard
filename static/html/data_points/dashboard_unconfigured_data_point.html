@@ -1,0 +1,34 @@
+<div class='data_point_config'>
+    <div class='image_and_title'>
+        <img src='${image_small}' />
+        <h3>${full_display_name}</h3>
+    </div>
+    <div class='instructions'>
+        <p >{{html instructions}}</p>
+    </div>
+    <form>
+        <div class='configuration' data-name='${type}'>
+            {{each(index, element) elements}}
+                {{if element.type == 'text'}}
+                    <div class='form_row'>
+                        <label>${element.display_name}</label>
+                        <input type="${element.type}" name="${element.name}" class="${element.name}" value="${element.value}"/>
+                        <p class="help">{{html element.help}}</p>
+                    </div>
+                {{/if}}
+                {{if element.type == 'api_key'}}
+                    <div class='form_row api_key_row'>
+                        <label>${element.display_name}</label>
+                        <input disabled='disabled' type="${element.type}" name="${element.name}" class="${element.name}" value="${access_api_key_store_value($data.type)}"/>
+                        <a class="api_key_link">Change</a>
+                        <p class="help">Click the 'change' button to open the api key manager</p>
+                    </div>
+                {{/if}}
+            {{/each}}
+        </div>
+        <div class="form_actions">
+            <input type="submit" name="cancel" class="cancel" value="remove"/>
+            <input type="submit" name="save"  class="save" value="save"/>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,6 @@
+<div class="api_key_line">
+    <label>${display_name}</label><input name="${name}" type="text" value="${api_key}" />
+    <div class="instruction {{if api_key < ' '}}extended{{/if}}">
+        {{html help_text}}
+    </div>
+</div>

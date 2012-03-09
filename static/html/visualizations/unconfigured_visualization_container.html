@@ -1,0 +1,48 @@
+<div class="visualization_container visualization_config">
+    {{tmpl 'visualization_header'}}
+    <div class='instructions'>
+        <p>${instructions}</p>
+    </div>
+    <form>
+        <div class="configuration">
+            <div class="data_dimensions">
+                <h4>Data Dimensions</h4>
+                {{each(index, dimension) data_dimensions}}
+                    <div class="form_row">
+                        <label>${dimension.display_name}</label>
+                        <select name="${dimension.name}" class="${dimension.name}">
+                            {{each(index, option) dimension.values}}
+                                <option value="${option.value}" data-title="${option.name}">${option.name}</option>
+                            {{/each}}
+                        </select>
+                        <p class="help">{{html dimension.help}}</p>
+                    </div>
+                {{/each}}
+            </div>
+            {{each(index, element) elements}}
+                {{if element.type == 'text'}}
+                <div class='form_row'>
+                    <label>${element.display_name}</label>
+                    <input type="${element.type}" name="${element.name}" class="${element.name}" value="${element.value}"/>
+                    <p class="help">{{html element.help}}</p>
+                </div>
+                {{/if}}
+                {{if element.type == 'select'}}
+                <div class='form_row'>
+                    <label>${element.display_name}</label>
+                    <select name="${element.name}" class="${element.name}">
+                        {{each(index, option) element.values}}
+                            <option value="${option}" >${option}</option>
+                        {{/each}}
+                    </select>
+                    <p class="help">{{html element.help}}</p>
+                </div>
+                {{/if}}
+            {{/each}}
+        </div>
+        <div class="form_actions">
+            <input type="submit" name="cancel" class="remove" value="remove"/>
+            <input type="submit" name="save"  class="save" value="save"/>
+        </div>
+    </form>
+</div>

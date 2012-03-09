@@ -1,0 +1,45 @@
+body { background: #131313 url('/static/images/thecommunity/background_page.png'); font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; font-size:80%; }
+html {}
+a { cursor:pointer; text-decoration:none; color:inherit; font-weight:bold;}
+a:hover { text-decoration:underline; }
+.container { padding:10px;}
+
+.alert p { padding:10px; }
+.empty { border:2px solid; background-color:#696; color:#333;}
+
+/**********************************************************************************************************************/
+/* HEADER                                                                                                             */
+/**********************************************************************************************************************/
+#page_header { background-color:#1a1a1a; height:50px; color:#FFF; }
+#page_header_inner { width:1000px; margin:0 auto;}
+#page_header #logo_container { width:55%; float:left; }
+#page_header #logo_container img { height:35px; }
+#page_header #header_links_container { width:40%; float:right; text-align:right; padding:9px; }
+#page_header #header_links_container a { display:inline-block; padding-left:10px;}
+#page_header #personal_menu { background-color:#222; width:130px; position:absolute; right:30px; top:32px; display:none;}
+#page_header #personal_menu a { display:block; text-align:left; padding:5px;}
+
+/**********************************************************************************************************************/
+/* PAGE                                                                                                               */
+/**********************************************************************************************************************/
+#page_container { }
+#page { width:1000px; margin:0 auto; }
+
+/**********************************************************************************************************************/
+/* TIP - Javascript Info Viz                                                                                          */
+/**********************************************************************************************************************/
+.tip {
+    color: #111;
+    width: 139px;
+    background-color: white;
+    border:1px solid #ccc;
+    -moz-box-shadow:#555 2px 2px 8px;
+    -webkit-box-shadow:#555 2px 2px 8px;
+    -o-box-shadow:#555 2px 2px 8px;
+    box-shadow:#555 2px 2px 8px;
+    opacity:0.9;
+    filter:alpha(opacity=90);
+    font-size:10px;
+    font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    padding:7px;
+}

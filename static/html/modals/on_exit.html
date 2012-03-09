@@ -1,0 +1,31 @@
+<div id='on_exit_modal' class="modal" title='Insight Meta Data'>
+    <div class='container'>
+        <p class="instructions"></p>
+        <div class="form_row name">
+            <label class="form_row_label">Name your insight</label>
+            <input type="text" />
+        </div>
+        <div class="form_row description">
+            <label class="form_row_label">Describe you're insight</label>
+            <textarea></textarea>
+        </div>
+        <div class="form_row live">
+            <label class="form_row_label">Keep collecting data for this insight when your not looking at it?</label>
+            <div class="radio">
+                <input type="radio" name='live' id='keep_running_yes'><label for="keep_running_yes">yes</label>
+                <input type="radio" name='live' id='keep_running_no' checked="checked"><label for="keep_running_no">no</label>
+            </div>
+        </div>
+        <div class="form_row categories">
+            <label class="form_row_label">Choose categories that this insight belongs to</label>
+            <ul class="clearfix">
+                {% for category in INSIGHT_CATEGORIES %}
+                    <li><input type="checkbox" id='category_{{ forloop.counter }}'/><label class="checkbox_label" for="category_{{ forloop.counter }}">{{ category }}</label></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div id='waiting_modal' class="jqmWindow">
+        <p>Saving <img src='/static/images/thecommunity/loading_circle.gif'/></p>
+    </div>
+</div>
