@@ -1,4 +1,5 @@
 from threading import Thread
+from django.contrib import messages
 from django.shortcuts import render_to_response, redirect
 from django.views.decorators.cache import never_cache
 from django.http import HttpResponse
@@ -31,6 +32,10 @@ def async(gen):
 def dashboard_load(request, id):
     Logger.Info('%s - dashboard - started' % __name__)
     Logger.Debug('%s - dashboard - started with id:%s' % (__name__, id))
+    if not request.user or not request.user.is_authnticated():
+        Logger.Warn('%s - dashboard_load - dashboard load called with AnonymousUser' % __name__)
+        messages.error(request, 'Sorry, you must be logged in to access this insight.')
+        return redirect('/')
     dc = DashboardsController(request.user)
     db = dc.get_dashboard_by_id(id)
     Logger.Info('%s - dashboard - finished' % __name__)
