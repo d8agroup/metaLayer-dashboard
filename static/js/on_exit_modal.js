@@ -126,14 +126,14 @@
                             'Save and back to Community':function()
                             {
                                 save(on_exit_modal);
-                                document.location.href = '/community';
+                                document.location.href = (next == '') ? '/community' : next;
                             },
                             'Delete this Insight':function()
                             {
                                 var dashboard = $('.dashboard').data('dashboard');
                                 dashboard.collections = [];
                                 save(on_exit_modal);
-                                document.location.href = '/community';
+                                document.location.href = (next == '') ? '/community' : next;
                             }
                         }
                     }

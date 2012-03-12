@@ -4,11 +4,17 @@
         <div class="header_right">
             <div class="header_logout">
                 <ul>
-					<li><a class="config_link" href="/delv/">Home</a></li>
-                    <li><a class="config_link" href="/delv/{{ user.username }}">Activity</a></li>
-                    <li><a class="config_link" id="configure_link">Configure</a></li>
-					<li><a class='help_link'>Help</a></li>
-                    <li class="nobg"><a class="config_link" href="/delv/logout">Logout</a></li>
+                    {% if request.GET.next %}
+                        <li><a class="config_link" href="{{ request.GET.next }}">home</a></li>
+                        <li><a class="config_link" id="configure_link">Configure</a></li>
+                        <li class="nobg"><a class='help_link'>Help</a></li>
+                    {% else %}
+                        <li><a class="config_link" href="/delv/">Home</a></li>
+                        <li><a class="config_link" href="/delv/{{ user.username }}">Activity</a></li>
+                        <li><a class="config_link" id="configure_link">Configure</a></li>
+                        <li><a class='help_link'>Help</a></li>
+                        <li class="nobg"><a class="config_link" href="/delv/logout">Logout</a></li>
+                    {% endif %}
                 </ul>
             </div>
         </div>

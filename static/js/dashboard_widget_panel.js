@@ -81,7 +81,10 @@
 
             var widget_panel = this;
             widget_panel.children().remove();
-            $.get ( '/dashboard/widgets/get_all', function(data) { render_widgets_function(data, widget_panel) }, 'JSON' );
+            if (project_id == '' || company_id == '')
+                $.get ( '/dashboard/widgets/get_all', function(data) { render_widgets_function(data, widget_panel) }, 'JSON' );
+            else
+                $.get ( '/dashboard/widgets/get_all?project_id=' + project_id + '&company_id=' + company_id, function(data) { render_widgets_function(data, widget_panel) }, 'JSON' );
             widget_panel.corner();
             return widget_panel;
         },
