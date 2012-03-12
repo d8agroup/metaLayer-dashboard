@@ -32,7 +32,7 @@ def async(gen):
 def dashboard_load(request, id):
     Logger.Info('%s - dashboard - started' % __name__)
     Logger.Debug('%s - dashboard - started with id:%s' % (__name__, id))
-    if not request.user or not request.user.is_authnticated():
+    if not request.user or not request.user.is_authenticated():
         Logger.Warn('%s - dashboard_load - dashboard load called with AnonymousUser' % __name__)
         messages.error(request, 'Sorry, you must be logged in to access this insight.')
         return redirect('/')
