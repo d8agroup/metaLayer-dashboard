@@ -11,7 +11,7 @@ HEADER
 .header_right { width:565px; float:right; }
 .header_logout { width:320px; float:right; }
 .header_logout ul { float:right; }
-.header_logout ul li { font-size:12px; color:#FFF; line-height:28px; font-weight:bold; float:left; padding:0px 10px 0 5px; background:url(/static/images/thecommunity/header-login_sep.png) no-repeat right center; }
+.header_logout ul li { font-size:12px; color:#FFF; line-height:28px; font-weight:bold; float:left; padding:0px 10px 0 5px;  }
 .header_logout ul li a { text-decoration:none; color:#FFF; }
 .header_logout ul li.nobg { background:none; padding:0 0 0 5px; }
 

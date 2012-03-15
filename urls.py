@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import patterns, url
-from dashboard.thedashboard.views import *
+from views import *
 
 urlpatterns = patterns('',
     url(r'load/(\w+)$', dashboard),
