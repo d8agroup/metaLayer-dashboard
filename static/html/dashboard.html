@@ -74,6 +74,11 @@
                 }
             )
     </script>
+    {% if debug == 'on' %}
+        <style type="text/css">
+            .daterange { display:block !important; }
+        </style>
+    {% endif %}
     <script type="text/javascript" src="/static/js/thedashboard/init.js"></script>
 </head>
 <body data-username='{{ user.username }}' class="{% block body_class %}{% endblock %}">

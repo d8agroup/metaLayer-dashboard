@@ -52,6 +52,7 @@ def dashboard_load(request, id):
             'INSIGHT_CATEGORIES':settings.INSIGHT_CATEGORIES,
             'api_keys': api_keys,
             'static_host':settings.STATIC_HOST,
+            'debug':'on' if settings.DEBUG else 'off',
         },
         context_instance=RequestContext(request))
 
