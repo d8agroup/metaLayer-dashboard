@@ -34,6 +34,13 @@ function display_time(time)
     return d.toUTCString();
 }
 
+function display_time2(time)
+{
+    var d = new Date(time * 1000);
+    var date_parts = d.toString().split(' ');
+    return date_parts[1] + ' ' + date_parts[2] + ' ' + date_parts[3] + ' ' + date_parts[4]
+}
+
 function wait(ms)
 {
     ms += new Date().getTime();
@@ -89,6 +96,8 @@ function access_api_key_store_value(key)
 
 function track_event(category, action, label)
 {
+    if (_gaq == null)
+        return;
     if (label != null)
         _gaq.push(['_trackEvent', category, action, label]);
     else

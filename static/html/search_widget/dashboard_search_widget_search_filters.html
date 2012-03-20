@@ -1,10 +1,24 @@
+<div class="info">
+    While these filters are open, automatic update of the content below is paused.
+</div>
 <div class='pagination'>
     <p>this set has ${pagination.total} items. showing the latest ${items_shown}</p>
 </div>
 <div class="keywords">
+    <label>Filter by keywords</label>
     <div class='keywords_container'>
         <input type="text" value="${keywords}" />
-        <a class="apply_keyword_filter">+</a>
-        <a class="remove_keyword_filter">-</a>
+        <a class="remove_keyword_filter"><img src='/static/images/thedashboard/round_delete.png' /></a>
     </div>
 </div>
+<div class="daterange">
+    <div class="daterange_container">
+        <label>Filter by date range:<span class="range"></span></label>
+        <div class="daterange_slider_container">
+            <div class="slider"></div>
+        </div>
+    </div>
+</div>
+<div class="actions">
+    <a class="button save">save and apply these filters</a>
+</div> 

@@ -8,12 +8,6 @@
         init:function(configuration)
         {
             this.data('configuration', configuration);
-            if (configuration.search_filters.time == null)
-            {
-                var date = new Date();
-                var two_hours_ago = ((date.valueOf() * 0.001)|0) - 7200;
-                configuration.search_filters.time = '[' + two_hours_ago + '%20TO%20*]';
-            }
             this.dashboard_search_widget('render');
             return this;
         },
@@ -21,6 +15,39 @@
         {
             var dashboard_search_widget = this;
             var configuration = dashboard_search_widget.data('configuration');
+
+            //Calculate the base start and end time for this collection search based on the data points
+            if (configuration.base_search_configuration == null)
+                configuration.base_search_configuration = {};
+            var base_start_time = null;
+            for (var x=0; x<configuration.data_points.length; x++)
+                for (var y=0; y<configuration.data_points[x].elements.length; y++)
+                    if (configuration.data_points[x].elements[y].name == 'start_time')
+                    {
+                        var new_value = configuration.data_points[x].elements[y].value;
+                        if (base_start_time == null)
+                            base_start_time = new_value;
+                        else 
+                            if (new_value == '*' || (base_start_time != '*' && new_value < base_start_time))
+                                    base_start_time = new_value;
+                    }
+            configuration.base_search_configuration.search_start_time = (base_start_time != null) ? base_start_time : ((new Date().valueOf() * 0.001)|0) - 7200;
+            var base_end_time = null;
+            for (var x=0; x<configuration.data_points.length; x++)
+                for (var y=0; y<configuration.data_points[x].elements.length; y++)
+                    if (configuration.data_points[x].elements[y].name == 'end_time')
+                    {
+                        var new_value = configuration.data_points[x].elements[y].value;
+                        if (base_end_time == null)
+                            base_end_time = new_value;
+                        else 
+                            if (new_value == '*' || (base_end_time != '*' && new_value > base_end_time))
+                                    base_end_time = new_value;
+                    }
+            configuration.base_search_configuration.search_end_time = (base_end_time != null) ? base_end_time : '*';
+            if (configuration.search_filters.time == null)
+                configuration.search_filters.time = '[' + configuration.base_search_configuration.search_start_time + '%20TO%20' + configuration.base_search_configuration.search_end_time + ']';
+
 
             dashboard_search_widget.children().remove();
             for (var x=0; x<configuration.data_points.length; x++)
@@ -74,8 +101,9 @@
                     var search_results = data.search_results;
                     configuration.search_results = search_results;
                     var search_filters = configuration.search_filters;
+                    var base_search_configuration = configuration.base_search_configuration;
                     search_widget.find('.search_results_container').dashboard_search_results({search_results:search_results, search_filters:search_filters});
-                    search_widget.find('.search_filters').dashboard_search_widget_search_filters({search_results:search_results, search_filters:search_filters});
+                    search_widget.find('.search_filters').dashboard_search_widget_search_filters({search_results:search_results, search_filters:search_filters, base_search_configuration:base_search_configuration});
 
                     if(!EMBEDDED_MODE)
                         search_widget.find('.search_results_container').jScrollPane( { topCapHeight:40, bottomCapHeight:40 } );
@@ -99,6 +127,11 @@
             };
 
             var dashboard_search_widget = this;
+            if(dashboard_search_widget.find('.search_filters').is(':visible'))
+            {
+                setTimeout(function() { dashboard_search_widget.dashboard_search_widget('run_search') }, 30000);
+                return;
+            }
             dashboard_search_widget.find('.options_container .refresh_data img').attr
                 (
                     'src',

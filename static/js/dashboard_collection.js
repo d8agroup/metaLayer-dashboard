@@ -23,6 +23,8 @@
                 collection.outputs = [];
             if (collection.visualizations == null)
                 collection.visualizations = [];
+            if (collection.base_search_configuration == null)
+                collection.base_search_configuration = {};
             dashboard_collection.data('configuration', collection);
             return dashboard_collection;
         },
@@ -66,6 +68,7 @@
             configuration.data_points = [];
             configuration.actions = [];
             configuration.visualizations = [];
+            configuration.base_search_configuration = {};
             for (var o=0; o<configuration.outputs.length; o++)
                 $.post( '/dashboard/outputs/remove_output', { output:JSON.stringify(configuration.outputs[o]), csrfmiddlewaretoken:$('#csrf_form input').val() } );
             configuration.outputs = [];

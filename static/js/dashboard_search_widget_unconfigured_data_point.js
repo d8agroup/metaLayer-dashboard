@@ -58,7 +58,8 @@
             event.preventDefault();
             container.find('.errors').remove();
             for (var x=0; x < data_point.elements.length; x++)
-                data_point.elements[x]['value'] = container.find('.data_point_config form .form_row .' + data_point.elements[x].name).val();
+                if (container.find('.data_point_config form .form_row .' + data_point.elements[x].name).length > 0)
+                    data_point.elements[x]['value'] = container.find('.data_point_config form .form_row .' + data_point.elements[x].name).val();
             $.post
                 (
                     '/dashboard/data_points/validate',

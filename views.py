@@ -163,7 +163,6 @@ def dashboard_remove_action(request):
     Logger.Info('%s - dashboard_remove_action - finished' % __name__)
     return JSONResponse()
 
-
 @login_required(login_url='/')
 def dashboard_add_action_to_data_points(request):
     Logger.Info('%s - dashboard_add_action_to_data_points - started' % __name__)
