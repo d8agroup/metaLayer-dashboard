@@ -10,8 +10,10 @@
             var dashboard_search_results = this;
             var search_results = data.search_results;
             var search_filters = data.search_filters;
+            var search_actions = data.actions;
             dashboard_search_results.data('search_results', search_results);
             dashboard_search_results.data('search_filters', search_filters);
+            dashboard_search_results.data('search_actions', search_actions);
             dashboard_search_results.dashboard_search_results('render');
             return dashboard_search_results;
         },
@@ -19,6 +21,7 @@
         {
             var search_results_container = this;
             var search_results = search_results_container.data('search_results');
+            var search_actions = search_results_container.data('search_actions');
             search_results_container.children().remove();
 
             if ($.isEmptyObject(search_results))
@@ -30,7 +33,7 @@
             else
             {
                 var search_results_content_items_html = $('<ul class="content_items"></ul>');
-                search_results_container.append(search_results_content_items_html.dashboard_search_results_content_items(search_results));
+                search_results_container.append(search_results_content_items_html.dashboard_search_results_content_items({search_results:search_results, search_actions:search_actions}));
             }
             return search_results_container;
         }
