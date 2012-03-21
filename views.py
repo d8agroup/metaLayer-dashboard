@@ -247,6 +247,14 @@ def dashboard_get_content_item_template(request, type, sub_type):
     Logger.Info('%s - dashboard_get_content_item_template - finished' % __name__)
     return JSONResponse({'template':template, 'type':type, 'sub_type':sub_type})
 
+def dashboard_get_action_template(request, name):
+    Logger.Info('%s - dashboard_get_action_template - started' % __name__)
+    action = { 'name': name }
+    ac = ActionController(action)
+    template = ac.get_content_item_template()
+    Logger.Info('%s - dashboard_get_action_template - finished' % __name__)
+    return JSONResponse({'template':template, 'name':name })
+
 @login_required(login_url='/')
 @async
 def dashboard_save(request):

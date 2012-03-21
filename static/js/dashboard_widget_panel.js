@@ -16,6 +16,13 @@
                     $.template(template_name, template);
                 };
 
+                var load_action_content_template = function(data)
+                {
+                    var template = data.template;
+                    var template_name = 'dashboard_search_results_action_' + data.name;
+                    $.template(template_name, template);
+                };
+
                 var empty_widget_panel_html = $("<div class='widget_panel'><table><tr></tr></table></div>");
 
                 var data_point_widgets_container_html = $('<td id="data_point_widgets_container"></td>');
@@ -45,6 +52,10 @@
                     action_html.data('action', action);
                     action_widgets_container_html.append(action_html);
                     action_html.corner();
+
+                    //Also load the actiontemplates
+                    var load_template_url = '/dashboard/actions/get_content_item_template/' + action.name;
+                    $.get ( load_template_url, function(data) { load_action_content_template(data); } );
                 }
                 empty_widget_panel_html.find('tr').append(action_widgets_container_html);
 

@@ -157,6 +157,8 @@ DASHBOARD
 
 .search_widget .content_items { padding:0 5px;}
 .search_widget .content_items li { padding:5px 0 35px 0;; font-size:80%; }
+.search_widget .content_items li .actions { display:none; }
+.search_widget .content_items li .actions li { padding:0; }
 
 .output { background-color:#333; margin:2px; }
 .output .remove { float:right; padding:2px; }
