@@ -39,7 +39,7 @@
             ? ((new Date().valueOf() * 0.001)|0)
             : parseInt(base_search_configuration.search_end_time);
 
-        $('.daterange .range').html(display_time2(search_filter_start_time) + ' to ' + ((search_filter_end_time == base_search_end_time) ? 'Now' : display_time2(search_filter_end_time)));
+        search_filters_container.find('.daterange .range').html(display_time2(search_filter_start_time) + ' to ' + ((search_filter_end_time == base_search_end_time) ? 'Now' : display_time2(search_filter_end_time)));
         search_filters_container.find('.daterange .slider').slider
             (
                 {
@@ -51,7 +51,7 @@
                     {
                         var start = ui.values[0];
                         var end = ui.values[1];
-                        $('.daterange .range').html(display_time2(start) + ' to ' + ((end == base_search_end_time) ? 'Now' : display_time2(end)));
+                        search_filters_container.find('.daterange .range').html(display_time2(start) + ' to ' + ((end == base_search_end_time) ? 'Now' : display_time2(end)));
                     }
                 }
             );
@@ -60,11 +60,11 @@
                 function()
                 {
                     search_filters_container.data('search_filters')['keywords'] = search_filters_container.find('.keywords input').val();
-                    var slider_min_value = $('.daterange .slider').slider('values', 0);
+                    var slider_min_value = search_filters_container.find('.daterange .slider').slider('values', 0);
                     var start_time = (slider_min_value == base_search_start_time)
                         ? base_search_configuration.search_start_time
                         : slider_min_value;
-                    var slider_max_value = $('.daterange .slider').slider('values', 1);
+                    var slider_max_value = search_filters_container.find('.daterange .slider').slider('values', 1);
                     var end_time = (slider_max_value == base_search_end_time)
                         ? base_search_configuration.search_end_time
                         : slider_max_value;
