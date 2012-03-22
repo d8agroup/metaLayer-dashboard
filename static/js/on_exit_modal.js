@@ -123,7 +123,7 @@
                             {
                                 save(on_exit_modal);
                             },
-                            'Save and back to Community':function()
+                            'Save and Exit':function()
                             {
                                 save(on_exit_modal);
                                 document.location.href = (next == '') ? '/community' : next;
