@@ -51,7 +51,7 @@
                     {
                         var start = ui.values[0];
                         var end = ui.values[1];
-                        search_filters_container.find('.daterange .range').html(display_time2(start) + ' to ' + ((end == base_search_end_time) ? 'Now' : display_time2(end)));
+                        $(ui.handle).parents('.collection_container').find('.daterange .range').html(display_time2(start) + ' to ' + ((end == base_search_end_time) ? 'Now' : display_time2(end)));
                     }
                 }
             );
