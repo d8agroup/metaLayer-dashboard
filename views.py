@@ -40,10 +40,16 @@ def dashboard_load(request, id):
     db = dc.get_dashboard_by_id(id)
     Logger.Info('%s - dashboard - finished' % __name__)
     user_profile = request.user.profile
-    raw_api_keys = user_profile.api_keys
-    api_keys = {}
-    for api_key in raw_api_keys:
-        api_keys[api_key['name']] = api_key['api_key']
+    if request.GET.get('company_id'):
+        from companies.controllers import CompaniesController
+        api_keys = {}
+        for k in CompaniesController.GetCompanyAPIKeys(request.GET['company_id']):
+            api_keys[k['type']] = k['api_key']
+    else:
+        raw_api_keys = user_profile.api_keys
+        api_keys = {}
+        for api_key in raw_api_keys:
+            api_keys[api_key['name']] = api_key['api_key']
     api_keys = json.dumps(api_keys)
     return render_to_response(
         'thedashboard/dashboard.html',

@@ -43,7 +43,11 @@
                     }
                 }
             );
+        if (project_id == '' || company_id == '')
+            $.get('/dashboard/api_keys/load', function(data) { render_api_keys(data); });
+        else
+            $.get('/dashboard/api_keys/load?project_id=' + project_id + '&company_id=' + company_id, function(data) { render_api_keys(data); });
 
-        $.get('/dashboard/api_keys/load', function(data) { render_api_keys(data); });
+
     }
 })(jQuery);

@@ -104,6 +104,15 @@
                     if (configuration.actions == null)
                         configuration.actions = [];
                     configuration.actions[configuration.actions.length] = action;
+                    if (action.elements.length == 1 && action.elements[0].type == 'api_key')
+                    {
+                        var api_key = access_api_key_store_value(action.name);
+                        if (api_key > '')
+                        {
+                            action.elements[0].value = api_key;
+                            action.configured = true;
+                        }
+                    }
                     if (action.configured)
                     {
                         $.post
@@ -116,6 +125,7 @@
                                 }
                             );
                     }
+
                     collection.data('configuration', configuration);
                     collection.dashboard_collection('render');
                     track_event('action', 'added', action.name);
