@@ -36,12 +36,12 @@
                 return unconfigurable > 0;
             };
 
-            var remove_click_function = function(event, container, visualization)
+            var remove_click_function = function(event, container, visualization_id)
             {
                 event.preventDefault();
-                container.parents('.collection_container').dashboard_collection('remove_visualization', visualization.id);
-                container.remove();
-                track_event('visualization', 'remove', visualization.name);
+                container.parents('.collection_container').dashboard_collection('remove_visualization', visualization_id);
+                container.html('');
+                //track_event('visualization', 'remove', visualization.name);
             };
 
             var save_button_clicked = function(event, container, visualization)
