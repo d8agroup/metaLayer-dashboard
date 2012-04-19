@@ -22,6 +22,7 @@ urlpatterns = patterns('',
     url(r'actions/get_content_item_template/(\w+)', dashboard_get_action_template),
     url(r'api_keys/load', load_api_keys),
     url(r'api_keys/save', save_api_keys),
+    url(r'apps/map$', maps_app),
     url(r'save$', dashboard_save),
     url(r'(\w+)$', dashboard_load)
 )
