@@ -440,7 +440,7 @@ def _build_visualization(request):
     visualization = {}
     
     for key in request.POST:
-        print 'POST parameter key: %s value: %s' % (key, request.POST[key])
+        #print 'POST parameter key: %s value: %s' % (key, request.POST[key])
         visualization[key] = request.POST[key]
     
     visualization["id"] = "test"
