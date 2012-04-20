@@ -17,6 +17,7 @@ from metalayercore.search.controllers import SearchController
 from metalayercore.dashboards.controllers import DashboardsController
 from utils import JSONResponse
 from metalayercore.visualizations.controllers import VisualizationController
+import providentia_extension
 
 ################################################################################
 # ASYNC REQUESTS                                                               #
@@ -358,7 +359,7 @@ def _build_and_save_datapoint(request, element_name, element_value):
     data_point['configured_display_name'] = '%s: %s' % (element_name, element_value)
     data_point['configured'] = True
     data_point['elements'][0]['value'] = element_value
-
+    
     dpc = DataPointController(data_point)
     dpc.data_point_added()
     
@@ -384,7 +385,9 @@ def _generate_map_visualization(request, visualization, configuration):
     
     search_results_collection = [sc.run_search_and_return_results(sqa) for sqa in search_query_additions_collection]
     
-    return vc.render_javascript_visualization_for_search_results_collection(search_results_collection, configuration)
+    content = providentia_extension.render_javascript_based_visualization(vc.viz, search_results_collection, configuration)
+    
+    return content
 
 def _build_visualization(request):
     
@@ -393,7 +396,7 @@ def _build_visualization(request):
     from metalayercore.visualizations.lib.googlegeochart.visualization import Visualization
     
     visualization = Visualization().get_unconfigured_config()
-    visualization["elements"][0]["value"] = "Markers"
+    visualization["elements"][0]["value"] = "markers"
     visualization["elements"][1]["value"] = request.POST['location']
     visualization["name"] = request.POST['name']
     visualization["id"] = "test"

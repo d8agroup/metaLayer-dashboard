@@ -1,3 +1,5 @@
+var location_details = {};
+
 $(document).ready
 (
     function()
@@ -23,6 +25,31 @@ $(document).ready
          });
     }
 );
+
+function display_location_dialog(location) {
+   
+   if(location_details[location] && location_details[location].length > 0) {
+      
+      var table_html = '<tr><th><strong>Source</strong></th><th><strong>Content</strong></th></tr>\n';
+      for(var i=0; i < location_details[location].length; i++) {
+         table_html += '<tr><td class="source">' + location_details[location][i].source_display_name + '<td>' + location_details[location][i].title + '</td></tr>\n';
+      }
+      
+      $('#location_dialog_message').text('');
+      $('#location_dialog_data').html(table_html);
+      
+   } else {
+      $('#location_dialog_message').text('Sorry, no information is available for this location.');
+      $('#location_dialog_data').html('');
+   }
+   
+   $('#location_dialog').dialog({
+      draggable: true,
+      resizable: false,
+      width: 450
+   });
+   
+}
 
 function open_feed_modal() {
    
