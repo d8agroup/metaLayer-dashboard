@@ -333,7 +333,7 @@ def maps_app(request):
     
 def _save_datapoint(request):
     
-    if request.POST["source"] == 'feed':
+    if request.POST.get('source') == 'feed':
         element_value = request.POST["feed"]
         element_name = "url"
     else:
