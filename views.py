@@ -310,9 +310,22 @@ def maps_app(request):
     
     if request.method == 'POST':
         
-        _save_datapoint(request)
+        datapoints = []
         
-        map_script = _generate_map_visualization(request)
+        if request.POST["source"] == "feed":
+            for feed_url in request.POST.getlist("feed"):
+                datapoint = _build_and_save_datapoint(request, "url", feed_url)
+                datapoints.append(datapoint)
+
+        else:
+            datapoint = _build_and_save_datapoint(request, "keywords", request.POST["query"])
+            datapoints.append(datapoint)
+        
+        configuration = _build_configuration(request, datapoints)
+        
+        visualization = _build_visualization(request)
+        
+        map_script = _generate_map_visualization(request, visualization, configuration)
         
         return render_to_response(
             'thedashboard/apps/map.html',
@@ -321,7 +334,7 @@ def maps_app(request):
                 'query': request.POST['query'] if 'query' in request.POST else "",
                 'source': request.POST['source'] if 'source' in request.POST else "",
                 'location': request.POST['location'] if 'location' in request.POST else "",
-                'feed': [request.POST['feed']] if 'feed' in request.POST else None
+                'feed': request.POST.getlist('feed') if 'feed' in request.POST else None
             },
             context_instance=RequestContext(request))
     
@@ -330,100 +343,38 @@ def maps_app(request):
         {
         },
         context_instance=RequestContext(request))
-    
-def _save_datapoint(request):
-    
-    if request.POST.get('source') == 'feed':
-        element_value = request.POST["feed"]
-        element_name = "url"
-    else:
-        element_value = request.POST["query"]
-        element_name = "keywords"
+
+def _build_and_save_datapoint(request, element_name, element_value):
     
     start_time = time.time()
-    #data_point = request.POST['data_point']
-    #data_point = json.loads(data_point)
-    data_point = {
-        "image_large":"/static/images/thedashboard/data_points/twitter_large.png",
-        "configured_display_name":"Twitter: testquery",
-        "image_medium":"/static/images/thedashboard/data_points/twitter_medium.png",
-        "configured":True,
-        "image_small":"/static/images/thedashboard/data_points/twitter_small.png",
-        "id":"7970755b7c8e493d8583eed6a1c46ab9",
-        "elements":[{
-            "display_name":"What to search for",
-            "type":"text",
-            "name": element_name,
-            "value": element_value,
-            "help":"The keywords or hashtags that you want to use to search Twitter"
-            },
-            {
-            "display_name":"Search Start Date",
-            "type":"hidden",
-            "name":"start_time",
-            "value":"1334185102", #TODO need current time
-            "help":""
-            },
-            {
-            "display_name":"Search End Date",
-            "type":"hidden",
-            "name":"end_time",
-            "value":"*",
-            "help":""
-            }],
-        "display_name_short":"Twitter",
-        "full_display_name":"Twitter Search",
-        "type": request.POST["source"],
-        "sub_type": request.POST["source"],
-        "instructions":"Use this data point to search the public tweet stream."
-        }
+    
+    from utils import my_import
+    
+    data_point_obj = my_import('metalayercore.datapoints.lib.%s.datapoint' % request.POST["source"])
+    data_point_obj = getattr(data_point_obj, 'DataPoint')()
+    
+    data_point = data_point_obj.get_unconfigured_config()
+    data_point['id'] = data_point_obj.generate_configured_guid(data_point)
+    data_point['configured_display_name'] = '%s: %s' % (element_name, element_value)
+    data_point['configured'] = True
+    data_point['elements'][0]['value'] = element_value
+
     dpc = DataPointController(data_point)
     dpc.data_point_added()
-    #actions = request.POST['actions']
-    #actions = json.loads(actions)
-    actions = [
-        {
-        "display_name_long":"Location Detection",
-        "image_large":"/static/images/thedashboard/actions/location_small.png",
-        "elements":[
-            {
-            "type":"api_key",
-            "display_name":"Your Yahoo API key",
-            "name":"api_key",
-            "value":"dj0yJmk9Y283MmUySEtzUTBEJmQ9WVdrOWNrUk1NMjlwTkdVbWNHbzlPRFk1TURVME9UWXkmcz1jb25zdW1lcnNlY3JldCZ4PTg2",
-            "help":"Using Yahoo Placemaker requires an API key, to get one or change your's, click <a href=\"http://developer.yahoo.com/geo/placemaker/\" target=\"_blank\">here</a><br/><br/><span class=\"extra\">Getting a Yahoo Placemaker API Key is a little tricky but nothing to worry about.<br/><br/> First click on the link above and sign in with your Yahoo, Google or Facebook id. <br/>On the next screen you can enter \"metalayer\" for the application name, description and Application Owner (at the bottom). <br/>Then enter \"http://metalayer.com\" for the Application URL and Application domain and \"http://metalayer.com/favicon.ico\" for the Favicon URL. <br/>Finally enter \"support@metalayer.com\" for the Contact email. Then on the next screen, copy the api into the box above and click \"Save and Exit\".<br/><br/> You can of cause use your own details while singing up for an API key with Yahoo if you want to.</span>"
-            }],
-        "content_properties":
-        {
-        "added":[
-            {
-            "type":"location_string",
-            "display_name":"Yahoo Placemaker Location",
-            "name":"location"
-            },
-            {
-            "type":"location_point",
-            "display_name":"Yahoo Placemaker Points",
-            "name":"point"
-            }
-            ]
-        },
-        "name":"yahooplacemaker",
-        "configured":True,
-        "instructions":"<div class=\"advanced\">This is an advanced feature and requires a bit of technical know-how to use. We're working to make this less painful, we promise.</div><br/>Yahoo Placemaker will extract location based information from content allowing you to visualize content on a map",
-        "image_small":"/static/images/thedashboard/actions/location_small.png",
-        "display_name_short":"Location",
-        "id":"a3497017d643437491c0a1dde3565cef"
-        }
-    ]
-    AggregationController.AggregateSingleDataPoint(data_point, actions)
-    Logger.Debug('%s - dashboard_add_data_point - finished in %i seconds' % (__name__, int(time.time() - start_time)))
-
-
-def _generate_map_visualization(request):
     
-    visualization = _build_visualization(request)
-    configuration = _build_configuration(request)
+    from metalayercore.actions.lib.yahooplacemaker.action import Action
+    
+    actions = [ Action().get_unconfigured_config() ]
+    actions[0]['elements'][0]['value'] = 'dj0yJmk9Y283MmUySEtzUTBEJmQ9WVdrOWNrUk1NMjlwTkdVbWNHbzlPRFk1TURVME9UWXkmcz1jb25zdW1lcnNlY3JldCZ4PTg2' #TODO add api key
+    actions[0]['id'] = 'a3497017d643437491c0a1dde3565cef' #TODO make dynamic
+    
+    AggregationController.AggregateSingleDataPoint(data_point, actions)
+    
+    Logger.Debug('%s - _save_datapoints - finished in %i seconds' % (__name__, int(time.time() - start_time)))
+    
+    return data_point
+
+def _generate_map_visualization(request, visualization, configuration):
     
     vc = VisualizationController(visualization)
     
@@ -439,71 +390,12 @@ def _build_visualization(request):
     
     visualization = {}
     
-    for key in request.POST:
-        #print 'POST parameter key: %s value: %s' % (key, request.POST[key])
-        visualization[key] = request.POST[key]
+    from metalayercore.visualizations.lib.googlegeochart.visualization import Visualization
     
+    visualization = Visualization().get_unconfigured_config()
+    visualization["elements"][1]["value"] = request.POST['location']
+    visualization["name"] = request.POST['name']
     visualization["id"] = "test"
-    visualization["elements"] = [
-        {
-            "display_name":"Map type",
-            "name":"map_mode",
-            "value":"Regions",
-            "values":[
-                "Regions",
-                "Markers"
-            ],
-            "type":"select",
-            "help":"Region works best with country data while Marker works well with cities or other places"
-        },
-        {
-            "display_name":"Map focus",
-            "name":"focus",
-            "value": request.POST['location'],
-            "values":[
-                "World",
-                "North America",
-                "Europe",
-                "Asia",
-                "Africa",
-                "Americas",
-                "Oceania"
-            ],
-            "type":"select",
-            "help":"Choose a geographic region to focus the map on"
-        },
-        {
-            "display_name":"Color Scheme",
-            "name":"colorscheme",
-            "value":"Blue",
-            "values":[
-                "Blue",
-                "Green",
-                "Grey",
-                "Orange",
-                "Purple",
-                "RedBlue - Green",
-                "Blue - Purple",
-                "Green - Blue",
-                "Orange - Red",
-                "Purple - Red",
-                "Yellow - Brown"
-            ],
-            "type":"select",
-            "help":""
-        },
-        {
-            "display_name":"Background",
-            "name":"background",
-            "value":"Light",
-            "values":[
-                "Light",
-                "Dark"
-            ],
-            "type":"select",
-            "help":""
-        }
-    ]
     
     visualization["data_dimensions"] = [
         {
@@ -524,57 +416,18 @@ def _build_visualization(request):
         }
     ]
     
+    # Color Scheme
+    visualization["elements"][2]["value"] = "Blue"
+    
+    print 'visualization'
+    print visualization
+    
     return visualization
     
-def _build_configuration(request):
-    
-    #configuration = {
-    #    'data_points':json.loads(request.POST['data_points']),
-    #    'search_filters':json.loads(request.POST['search_filters'])
-    #}
-    
-    if request.POST["source"] == 'feed':
-        element_value = request.POST["feed"]
-        element_name = "url"
-    else:
-        element_value = request.POST["query"]
-        element_name = "keywords"
+def _build_configuration(request, data_points):
     
     configuration = {
-        'data_points': [{
-            "image_large":"/static/images/thedashboard/data_points/twitter_large.png",
-            "configured_display_name":"Twitter: testquery",
-            "image_medium":"/static/images/thedashboard/data_points/twitter_medium.png",
-            "configured":True,
-            "image_small":"/static/images/thedashboard/data_points/twitter_small.png",
-            "id":"7970755b7c8e493d8583eed6a1c46ab9",
-            "elements":[{
-                "display_name":"What to search for",
-                "type":"text",
-                "name": element_name,
-                "value": element_value,
-                "help":"The keywords or hashtags that you want to use to search Twitter"
-                },
-                {
-                "display_name":"Search Start Date",
-                "type":"hidden",
-                "name":"start_time",
-                "value":"1334185102",
-                "help":""
-                },
-                {
-                "display_name":"Search End Date",
-                "type":"hidden",
-                "name":"end_time",
-                "value":"*",
-                "help":""
-                }],
-            "display_name_short":"Twitter",
-            "full_display_name":"Twitter Search",
-            "type": request.POST["source"],
-            "sub_type": request.POST["source"],
-            "instructions":"Use this data point to search the public tweet stream."
-            }],
+        'data_points': data_points,
         'search_filters': []
     }
     
