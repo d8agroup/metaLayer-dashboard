@@ -358,7 +358,7 @@ def _build_and_save_datapoint(request, element_name, element_value):
     data_point['configured_display_name'] = '%s: %s' % (element_name, element_value)
     data_point['configured'] = True
     data_point['elements'][0]['value'] = element_value
-    
+
     dpc = DataPointController(data_point)
     dpc.data_point_added()
     
