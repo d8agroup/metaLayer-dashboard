@@ -393,6 +393,7 @@ def _build_visualization(request):
     from metalayercore.visualizations.lib.googlegeochart.visualization import Visualization
     
     visualization = Visualization().get_unconfigured_config()
+    visualization["elements"][0]["value"] = "Markers"
     visualization["elements"][1]["value"] = request.POST['location']
     visualization["name"] = request.POST['name']
     visualization["id"] = "test"
