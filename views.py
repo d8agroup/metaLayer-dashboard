@@ -423,8 +423,8 @@ def _build_visualization(request):
     # Color Scheme
     visualization["elements"][2]["value"] = "Blue"
     
-    print 'visualization'
-    print visualization
+    #print 'visualization'
+    #print visualization
     
     return visualization
     
