@@ -24,7 +24,7 @@
 			Source Type: <br />
 			<br />
 			<input type="radio" name="source" value="twittersearch"
-				{% ifequal source 'twittersearch' %}checked="checked"{% endifequal %} /> Twitter <br />
+				{% if not source or source == 'twittersearch' %}checked="checked"{% endif %} /> Twitter <br />
 			<input type="radio" name="source" value="feed"
 			 	{% ifequal source 'feed' %}checked="checked"{% endifequal %} onclick="open_feed_modal()" /> Feed <br />
 			<input type="radio" name="source" value="googlenewssearch" 
