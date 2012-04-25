@@ -1,4 +1,4 @@
-body { background: #131313 url('/static/images/thedashboard/background_page.png'); font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; font-size:80%; }
+body { background:  #F8F6F6; font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; font-size:80%; }
 html {}
 a { cursor:pointer; text-decoration:none; color:inherit; font-weight:bold;}
 a:hover { text-decoration:underline; }
