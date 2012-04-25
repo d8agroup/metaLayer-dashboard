@@ -32,7 +32,7 @@ function display_location_dialog(location) {
       
       var table_html = '<tr><th><strong>Source</strong></th><th><strong>Content</strong></th></tr>\n';
       for(var i=0; i < location_details[location].length; i++) {
-         table_html += '<tr><td class="source">' + location_details[location][i].source_display_name + '<td>' + location_details[location][i].title + '</td></tr>\n';
+         table_html += '<tr><td class="clearfix"><img src="' + location_details[location][i].author_image + '" /><p><a target="_blank" href="' + location_details[location][i].link + '" >' + location_details[location][i].title + '</a></p></td></tr>\n';
       }
       
       $('#location_dialog_message').text('');
