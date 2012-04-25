@@ -1,24 +1,48 @@
-<header class="headerwrap1">
-    <div class="header">
-        <div class="logo1"><a class="config_link"  href="/"><img src="/static/images/thedashboard/inner_logo.jpg" alt=""></a><span>beta!</span></div>
-        <div class="header_right">
-            <div class="header_logout">
-                <ul>
-                    {% if request.GET.next %}
-                        <li><a class="config_link" href="{{ request.GET.next }}">Home</a></li>
-                        <li><a class="config_link" id="configure_link">Configure</a></li>
-                        <li class="nobg"><a class='help_link'>Help</a></li>
-                    {% else %}
-                        <li><a class="config_link" href="/delv/">Home</a></li>
-                        <li><a class="config_link" href="/delv/{{ user.username }}">Activity</a></li>
-                        <li><a class="config_link" id="configure_link">Configure</a></li>
-                        <li><a class='help_link'>Help</a></li>
-                        <li class="nobg"><a class="config_link" href="/delv/logout">Logout</a></li>
-                    {% endif %}
-                </ul>
-            </div>
+{#<header class="headerwrap1">#}
+{#    <div class="header">#}
+{#        <div class="logo1"><a class="config_link"  href="/"><img src="/static/images/thedashboard/inner_logo.jpg" alt=""></a><span>beta!</span></div>#}
+{#        <div class="header_right">#}
+{#            <div class="header_logout">#}
+{#                <ul>#}
+{#                    {% if request.GET.next %}#}
+{#                        <li><a class="config_link" href="{{ request.GET.next }}">Home</a></li>#}
+{#                        <li><a class="config_link" id="configure_link">Configure</a></li>#}
+{#                        <li class="nobg"><a class='help_link'>Help</a></li>#}
+{#                    {% else %}#}
+{#                        <li><a class="config_link" href="/delv/">Home</a></li>#}
+{#                        <li><a class="config_link" href="/delv/{{ user.username }}">Activity</a></li>#}
+{#                        <li><a class="config_link" id="configure_link">Configure</a></li>#}
+{#                        <li><a class='help_link'>Help</a></li>#}
+{#                        <li class="nobg"><a class="config_link" href="/delv/logout">Logout</a></li>#}
+{#                    {% endif %}#}
+{#                </ul>#}
+{#            </div>#}
+{#        </div>#}
+{#        <div class="clrflt"></div>#}
+{#    </div>#}
+{#</header>#}
+{#{% include 'thedashboard/header/help_1.html' %}#}
+<header class="clearfix">
+    <div class="inner">
+        <div class="left one_third">
+
         </div>
-        <div class="clrflt"></div>
+        <div class="right one_third">
+            <ul>
+                <li style="position:relative;">
+                    <div class="header_logo"></div>
+                    <div id="menu_dropdown">
+                        <a href="#">Logout</a>
+                        <a href="/{{ settings.SITE_URLS.company_prefix }}/{{ company.id }}/projects/{{ project.project_id }}">Home</a>
+                        <a href="#">Change Password</a>
+                        <a href="#">Organization</a>
+                        {#							{% block header_menu %}{% endblock %}#}
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="center one_third">
+
+        </div>
     </div>
 </header>
-{% include 'thedashboard/header/help_1.html' %}

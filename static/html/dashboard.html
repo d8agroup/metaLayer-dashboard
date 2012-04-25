@@ -71,6 +71,17 @@
                             },
                             100
                         );
+                    // Menu dropdown
+                    $('.header_logo').click(
+                            function() {
+                                if($('#menu_dropdown').css('display') === 'none')
+                                    $('#menu_dropdown').show()
+                                else
+                                    $('#menu_dropdown').hide()
+                            });
+                    $('.header_logo').mouseenter( function() { $('#menu_dropdown').show() } );
+                    $('#menu_dropdown').mouseleave( function() { $(this).hide(); } );
+
                 }
             )
     </script>

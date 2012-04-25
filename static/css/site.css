@@ -210,3 +210,17 @@ ON EXIT MODAL
 .ui-dialog-titlebar.ui-corner-all, .ui-dialog.ui-corner-all { -moz-border-radius-bottomleft: 0px; -webkit-border-bottom-left-radius: 0px; -khtml-border-bottom-left-radius: 0px; border-bottom-left-radius: 0px; }
 .ui-dialog-titlebar.ui-corner-all, .ui-dialog.ui-corner-all { -moz-border-radius-bottomright: 0px; -webkit-border-bottom-right-radius: 0px; -khtml-border-bottom-right-radius: 0px; border-bottom-right-radius: 0px; }
 .ui-state-active { background: #1a1a1a none !important; }
+
+header { width:100%; z-index:3000;}
+header .inner { width:750px; margin:0 auto;}
+header .header_logo { height:35px; }
+header .menu  { text-align:right; padding:10px}
+header .menu li { display:inline-block; margin-right:10px; }
+header {  }
+header .header_logo { background:url('/static/themes/companies/basic/images/logo_enkidu7.png') 0 0 no-repeat; height:60px; background-size:60px; }
+header .center { width:0px; }
+header .right { width:900px;}
+#menu_dropdown { display:none; position:absolute; top:13px; right:110px; background-color:#424244; padding:10px; -moz-border-radius:10px; -webkit-border-radius:10px; border-radius:10px; }
+#menu_dropdown a { color:#BBB; display:inline-bolck; padding:0 10px;}
+#menu_dropdown a:hover { text-decoration:none; color:#FFF;}
+.header_logo { display:block; float:right; width:112px; height:35px; position:relative; cursor: pointer; }
