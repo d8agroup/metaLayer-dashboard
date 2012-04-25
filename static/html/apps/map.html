@@ -19,17 +19,18 @@
 <div class="panel-container">
 	<div class="panel">
 		<form name="search" action="" method="POST">
-			Search: <input type="text" name="query" value="{{query}}" {% ifequal source 'feed' %}disabled="true"{% endifequal %}></input> <br />
+            <p class="instructions">Enter a search term then choose your search sources and map focus</p>
+            <input type="text" name="query" value="{{query}}" {% ifequal source 'feed' %}disabled="true"{% endifequal %}></input> <br />
 			<br />
-			Source Type: <br />
-			<br />
-			<input type="radio" name="source" value="twittersearch"
-				{% if not source or source == 'twittersearch' %}checked="checked"{% endif %} /> Twitter <br />
-			<input type="radio" name="source" value="feed"
-			 	{% ifequal source 'feed' %}checked="checked"{% endifequal %} onclick="open_feed_modal()" /> Feed <br />
-			<input type="radio" name="source" value="googlenewssearch" 
-				{% ifequal source 'googlenewssearch' %}checked="checked"{% endifequal %} /> Google News <br />
-			<br />
+            <div class="source_type">
+                <input type="radio" name="source" value="twittersearch"
+                    {% if not source or source == 'twittersearch' %}checked="checked"{% endif %} /> <img src="/static/images/thedashboard/data_points/twitter_small.png" class='source_image'/><br />
+                <input type="radio" name="source" value="feed"
+                    {% ifequal source 'feed' %}checked="checked"{% endifequal %} onclick="open_feed_modal()" /> <img src="/static/images/thedashboard/data_points/feed_small.png" class='source_image'/><br />
+                <input type="radio" name="source" value="googlenewssearch"
+                    {% ifequal source 'googlenewssearch' %}checked="checked"{% endifequal %} /> <img src="/static/images/thedashboard/data_points/googlenews_small.png" class='source_image'/> <br />
+                <br />
+            </div>
 			<!--
 			Start Time: <br />
 			<input type="text" name="start-time"></input> <br />
@@ -38,7 +39,6 @@
 			<input type="text" name="end-time"></input> <br />
 			<br />
 			-->
-			Location: <br />
 			<select name="location">
 				<option value="World" {% ifequal location 'World' %}selected="selected"{% endifequal %}>World</option>
 				<option value="North America" {% ifequal location 'North America' %}selected="selected"{% endifequal %}>North America</option>
@@ -60,7 +60,7 @@
 				{% endfor %}
 			</div>
 			
-			<button>Go</button>
+			<button class="button">Go</button>
 		</form>
 	</div>
 	<div class="tab-container">
