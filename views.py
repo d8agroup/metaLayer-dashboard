@@ -237,6 +237,7 @@ def dashboard_run_search(request):
     start_time = time.time()
     configuration = {
         'data_points':json.loads(request.POST['data_points']),
+        'actions':json.loads(request.POST['actions']),
         'search_filters':json.loads(request.POST['search_filters'])
     }
     sc = SearchController(configuration)

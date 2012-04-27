@@ -105,9 +105,7 @@
                     var actions = configuration.actions;
                     search_widget.find('.search_results_container').dashboard_search_results({search_results:search_results, search_filters:search_filters, actions:actions});
                     search_widget.find('.search_filters').dashboard_search_widget_search_filters({search_results:search_results, search_filters:search_filters, base_search_configuration:base_search_configuration});
-
-                    if(!EMBEDDED_MODE)
-                        search_widget.find('.search_results_container').jScrollPane( { topCapHeight:40, bottomCapHeight:40 } );
+                    search_widget.find('.search_results_container').jScrollPane( { topCapHeight:40, bottomCapHeight:40 } );
                     search_widget.find('.options_container .refresh_data img').attr('src', '/static/images/thedashboard/icon_clock.png' ) .removeClass('loading');
                     search_widget.parents('.collection_container').dashboard_collection('search_results_updated');
                     setTimeout(function() { run_search_at_interval_function(search_widget) }, 30000);
@@ -121,6 +119,7 @@
                             {
                                 data_points:JSON.stringify(configuration.data_points),
                                 search_filters:JSON.stringify(configuration.search_filters),
+                                actions:JSON.stringify(configuration.actions),
                                 csrfmiddlewaretoken:$('#csrf_form input').val()
                             },
                             function(data) { render_search_results_function(data, configuration); }
