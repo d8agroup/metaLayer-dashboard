@@ -210,3 +210,12 @@ ON EXIT MODAL
 .ui-dialog-titlebar.ui-corner-all, .ui-dialog.ui-corner-all { -moz-border-radius-bottomleft: 0px; -webkit-border-bottom-left-radius: 0px; -khtml-border-bottom-left-radius: 0px; border-bottom-left-radius: 0px; }
 .ui-dialog-titlebar.ui-corner-all, .ui-dialog.ui-corner-all { -moz-border-radius-bottomright: 0px; -webkit-border-bottom-right-radius: 0px; -khtml-border-bottom-right-radius: 0px; border-bottom-right-radius: 0px; }
 .ui-state-active { background: #1a1a1a none !important; }
+
+
+
+#providentia_header.menu_container { position:fixed; right:30px; top:10px; z-index:2000; font-size:120%; }
+#providentia_header.menu_container ul { float:left; margin:7px 10px 0 0; display:none; background-color:#333; padding:0 10px;}
+#providentia_header.menu_container ul li { display:inline-block; padding:10px 5px; }
+#providentia_header.menu_container ul li a { display:inline-block; padding:7px; color:#FFF; font-size:80%; font-weight:normal !important; }
+#providentia_header.menu_container ul li a:hover { background-color:#F8F8F6; color:#333; text-decoration:none; }
+#page_container { margin-top:70px;}

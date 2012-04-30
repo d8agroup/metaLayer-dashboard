@@ -71,6 +71,16 @@
                             },
                             100
                         );
+                    $('.button').button();
+                    $('.corner').corner('5px');
+                    var menu_launcher = $('#providentia_header.menu_container');
+                    menu_launcher.mouseover(function(){
+                        $('#providentia_header.menu_container ul').show();
+                    });
+                    menu_launcher.mouseout(function(){
+                        $('#providentia_header.menu_container ul').hide();
+                    });
+
                 }
             )
     </script>
@@ -86,7 +96,7 @@
     <form id='csrf_form'>
         {% csrf_token %}
     </form>
-    {% include 'thedashboard/header/header.html' with context='dashboard' %}
+    {% include 'header.html' with context='dashboard' %}
     <div id="page_container">
         <div id='page' data-username='{{ user.username }}'>
             <div id='content'>
