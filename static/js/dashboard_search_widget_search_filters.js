@@ -12,6 +12,7 @@
         var template_data = {
             keywords:search_results.keywords,
             pagination:search_results.pagination,
+            facet_groups:search_results.facet_groups,
             items_shown:(search_results.pagination.total > search_results.pagination.pagesize)
                 ? search_results.pagination.pagesize
                 : search_results.pagination.total

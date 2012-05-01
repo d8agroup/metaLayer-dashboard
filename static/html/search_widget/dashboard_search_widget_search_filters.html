@@ -19,6 +19,19 @@
         </div>
     </div>
 </div>
+<ul class="action_filters">
+    {{each(index, facet_group) facet_groups}}
+        <li class="action_filter">
+            <label>Filter by ${facet_group.display_name}</label>
+            <ul>
+                <li><a class="simple_facet_link selected" data-facet_value="_all">all</a></li>
+                {{each(index, facet) facet_group.facets}}
+                    <li><a class="simple_facet_link" data-facet_group="${facet_group.name}" data-facet_value="${facet.name}">${facet.name} (<span class="count">${facet.count}</span>)</a></li>
+                {{/each}}
+            </ul>
+        </li>
+    {{/each}}
+</ul>
 <div class="actions">
     <a class="button save">save and apply these filters</a>
 </div> 
