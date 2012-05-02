@@ -40,6 +40,22 @@
             ? ((new Date().valueOf() * 0.001)|0)
             : parseInt(base_search_configuration.search_end_time);
 
+        var simple_action_filters = search_filters_container.find('.action_filter');
+        for (var x=0; x<simple_action_filters.length; x++) {
+            var facet_name = $(simple_action_filters[x]).data('facet_name');
+            if (search_filters[facet_name] == null)
+                continue;
+            var facet_values = search_filters[facet_name].split('%20OR%20');
+            $(simple_action_filters[x]).data('facet_values', facet_values);
+            $(simple_action_filters[x]).find('.simple_facet_link.all').removeClass('selected');
+            $(simple_action_filters[x]).find('a.simple_facet_link:not(.all)').each(function(){
+                var link = $(this);
+                if ($.inArray(link.data('facet_value'), facet_values) > -1){
+                    link.addClass('selected');
+                }
+            })
+        }
+
         search_filters_container.find('.daterange .range').html(display_time2(search_filter_start_time) + ' to ' + ((search_filter_end_time == base_search_end_time) ? 'Now' : display_time2(search_filter_end_time)));
         search_filters_container.find('.daterange .slider').slider
             (
@@ -70,6 +86,21 @@
                         ? base_search_configuration.search_end_time
                         : slider_max_value;
                     search_filters_container.data('search_filters')['time'] = '[' + start_time + '%20TO%20' + end_time + ']';
+
+                    var simple_action_filters = search_filters_container.find('.action_filter');
+                    for (var x=0; x<simple_action_filters.length; x++) {
+                        var facet_values = [];
+                        var selected_facet_values = $(simple_action_filters[x]).data('facet_values');
+                        for (var y=0; y<selected_facet_values.length; y++)
+                            if (selected_facet_values[y] !== undefined)
+                                facet_values.push(selected_facet_values[x]);
+                        if (selected_facet_values.length == 0)
+                            continue;
+                        var facet_value_string = facet_values.join('%20OR%20');
+                        var facet_name = $(simple_action_filters[x]).data('facet_name');
+                        search_filters_container.data('search_filters')[facet_name] = facet_value_string;
+                    }
+
                     search_filters_container.parents('.collection_container').dashboard_collection('render');
                 }
             );
@@ -85,19 +116,31 @@
             var link = $(this);
             if (!link.is('.selected')) {
                 link.parents('ul').find('.simple_facet_link:not(.all)').removeClass('selected');
+                link.parents('li.action_filter').data('facet_values').length = 0;
             }
         });
 
         search_filters_container.find('a.simple_facet_link').click(function(event){
             var link = $(this);
+            var this_facet_value = link.data('facet_value');
             if (link.is('.selected')) {
                 link.removeClass('selected');
-                if (link.parents('ul').find('a.simple_facet_link.selected').length == 0)
-                    link.parents('ul').find('a.simple_facet_link.all').addClass('selected');
+                if (link.parents('ul').find('a.simple_facet_link.selected').length == 0){
+                    link.parents('ul').find('a.simple_facet_link.all').click();
+                }
+                else {
+                    var new_facet_values_array = [];
+                    var existing_facet_values_array = link.parents('li.action_filter').data('facet_values');
+                    for (var x=0; x<existing_facet_values_array.length; x++)
+                        if (existing_facet_values_array[x] != this_facet_value)
+                            new_facet_values_array.push(existing_facet_values_array[x]);
+                    link.parents('li.action_filter').data('facet_values', new_facet_values_array);
+                }
             }
             else {
                 link.parents('ul').find('a.simple_facet_link.all').removeClass('selected');
                 link.addClass('selected');
+                link.parents('li.action_filter').data('facet_values').push(this_facet_value);
             }
         });
 

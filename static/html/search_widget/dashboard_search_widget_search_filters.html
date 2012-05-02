@@ -21,12 +21,12 @@
 </div>
 <ul class="action_filters">
     {{each(index, facet_group) facet_groups}}
-        <li class="action_filter">
+        <li class="action_filter"  data-facet_values="[]" data-facet_name="${facet_group.name}" >
             <label>Filter by ${facet_group.display_name}</label>
             <ul>
-                <li><a class="simple_facet_link all selected" data-facet_value="_all">all</a></li>
+                <li><a class="simple_facet_link all selected">all</a></li>
                 {{each(index, facet) facet_group.facets}}
-                    <li><a class="simple_facet_link" data-facet_group="${facet_group.name}" data-facet_value="${facet.name}">${facet.name} (<span class="count">${facet.count}</span>)</a></li>
+                    <li><a class="simple_facet_link" data-facet_value="${facet.name}">${facet.name} (<span class="count">${facet.count}</span>)</a></li>
                 {{/each}}
             </ul>
         </li>
