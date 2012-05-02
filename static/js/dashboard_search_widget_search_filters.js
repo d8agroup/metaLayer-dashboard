@@ -80,6 +80,27 @@
                     $(this).parents('.keywords').find('input').val('');
                 }
             );
+
+        search_filters_container.find('a.simple_facet_link.all').click(function(event){
+            var link = $(this);
+            if (!link.is('.selected')) {
+                link.parents('ul').find('.simple_facet_link:not(.all)').removeClass('selected');
+            }
+        });
+
+        search_filters_container.find('a.simple_facet_link').click(function(event){
+            var link = $(this);
+            if (link.is('.selected')) {
+                link.removeClass('selected');
+                if (link.parents('ul').find('a.simple_facet_link.selected').length == 0)
+                    link.parents('ul').find('a.simple_facet_link.all').addClass('selected');
+            }
+            else {
+                link.parents('ul').find('a.simple_facet_link.all').removeClass('selected');
+                link.addClass('selected');
+            }
+        });
+
         return this
     }
 })( jQuery );
