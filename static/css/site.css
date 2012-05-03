@@ -147,13 +147,15 @@ DASHBOARD
 .search_widget .search_filters .keywords .keywords_container { background-color:#FFF; padding:5px; margin:10px auto 0;}
 .search_widget .search_filters .keywords .keywords_container input { border:none; width:90%; font-size:90%; margin-left:2px;}
 .search_widget .search_filters .keywords .keywords_container a { float:right; position:relative; right:5px;}
-.search_widget .search_filters .daterange { width:80%; margin:10px auto; border-bottom:1px dashed #444; padding-bottom:10px; display:none;}
+.search_widget .search_filters .daterange { width:80%; margin:10px auto 0; border-bottom:1px dashed #444; padding-bottom:10px; display:none;}
 .search_widget .search_filters .daterange .range { font-weight:bold; position:relative; left:10px;}
 .search_widget .search_filters .daterange .daterange_slider_container { width:98%; margin:10px auto 0; }
 .search_widget .search_filters .actions { text-align:right; width:80%; margin:10px auto 0;}
 .search_widget .search_filters .action_filters { width:80%; margin:0 auto; }
-.search_widget .search_filters .action_filters .action_filter { border-bottom:1px dashed #444; padding-bottom:10px; }
+.search_widget .search_filters .action_filters .action_filter { border-bottom:1px dashed #444; padding:10px 0; }
 .search_widget .search_filters .action_filters .action_filter ul li { display:inline-block; padding:5px; }
+.search_widget .search_filters .action_filters .action_filter ul li.zero { display:none; }
+.search_widget .search_filters .action_filters .action_filter ul li.more { display:none; }
 .search_widget .search_filters .action_filters .action_filter ul li a { color:#999; }
 .search_widget .search_filters .action_filters .action_filter ul li a:hover { color:#FFF; text-decoration:none; }
 .search_widget .search_filters .action_filters .action_filter ul li a.selected { color:#FFF;  }

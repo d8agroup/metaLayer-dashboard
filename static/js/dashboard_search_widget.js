@@ -163,10 +163,12 @@
             var dashboard_search_widget = this;
             var configuration = dashboard_search_widget.data('configuration');
             var new_actions = [];
+            var name_of_removed_action = '';
             for (var x=0; x<configuration.actions.length; x++)
                 if (configuration.actions[x].id != action_id)
                     new_actions[new_actions.length] = configuration.actions[x];
             dashboard_search_widget.data('configuration').actions = new_actions;
+            dashboard_search_widget.data('configuration').search_filters = {};
             dashboard_search_widget.parents('.collection_container').dashboard_collection('render');
             return dashboard_search_widget;
         }

@@ -9,6 +9,25 @@
         var search_results = data.search_results;
         var search_filters = data.search_filters;
         var base_search_configuration = data.base_search_configuration;
+
+
+        for (var x=0; x<search_results.facet_groups.length; x++)
+        {
+            var facet_group_name = search_results.facet_groups[x].name;
+            if (search_filters[facet_group_name] == null || search_filters[facet_group_name] == '')
+                continue;
+            var facet_values = search_filters[facet_group_name].split('%20AND%20');
+            search_results.facet_groups[x].facets.sort(function(facet_one, facet_two){
+                var facet_one_selected = $.inArray(facet_one.name, facet_values);
+                var facet_two_selected = $.inArray(facet_two.name, facet_values);
+                if ((facet_one_selected && facet_two_selected) || (!facet_one_selected && !facet_two_selected))
+                    return 0;
+                if (facet_one_selected)
+                    return 1;
+                return -1
+            });
+        }
+
         var template_data = {
             keywords:search_results.keywords,
             pagination:search_results.pagination,
@@ -43,9 +62,9 @@
         var simple_action_filters = search_filters_container.find('.action_filter');
         for (var x=0; x<simple_action_filters.length; x++) {
             var facet_name = $(simple_action_filters[x]).data('facet_name');
-            if (search_filters[facet_name] == null)
+            if (search_filters[facet_name] == null || search_filters[facet_name] == '')
                 continue;
-            var facet_values = search_filters[facet_name].split('%20OR%20');
+            var facet_values = search_filters[facet_name].split('%20AND%20');
             $(simple_action_filters[x]).data('facet_values', facet_values);
             $(simple_action_filters[x]).find('.simple_facet_link.all').removeClass('selected');
             $(simple_action_filters[x]).find('a.simple_facet_link:not(.all)').each(function(){
@@ -93,10 +112,10 @@
                         var selected_facet_values = $(simple_action_filters[x]).data('facet_values');
                         for (var y=0; y<selected_facet_values.length; y++)
                             if (selected_facet_values[y] !== undefined)
-                                facet_values.push(selected_facet_values[x]);
+                                facet_values.push(selected_facet_values[y]);
                         if (selected_facet_values.length == 0)
                             continue;
-                        var facet_value_string = facet_values.join('%20OR%20');
+                        var facet_value_string = facet_values.join('%20AND%20');
                         var facet_name = $(simple_action_filters[x]).data('facet_name');
                         search_filters_container.data('search_filters')[facet_name] = facet_value_string;
                     }
@@ -115,7 +134,7 @@
         search_filters_container.find('a.simple_facet_link.all').click(function(event){
             var link = $(this);
             if (!link.is('.selected')) {
-                link.parents('ul').find('.simple_facet_link:not(.all)').removeClass('selected');
+                link.parents('ul.simple_facet_links').find('.simple_facet_link:not(.all)').removeClass('selected');
                 link.parents('li.action_filter').data('facet_values').length = 0;
             }
         });
@@ -125,8 +144,8 @@
             var this_facet_value = link.data('facet_value');
             if (link.is('.selected')) {
                 link.removeClass('selected');
-                if (link.parents('ul').find('a.simple_facet_link.selected').length == 0){
-                    link.parents('ul').find('a.simple_facet_link.all').click();
+                if (link.parents('ul.simple_facet_links').find('a.simple_facet_link.selected').length == 0){
+                    link.parents('ul.simple_facet_links').find('a.simple_facet_link.all').click();
                 }
                 else {
                     var new_facet_values_array = [];
@@ -138,10 +157,19 @@
                 }
             }
             else {
-                link.parents('ul').find('a.simple_facet_link.all').removeClass('selected');
+                link.parents('ul.simple_facet_links').find('a.simple_facet_link.all').removeClass('selected');
                 link.addClass('selected');
                 link.parents('li.action_filter').data('facet_values').push(this_facet_value);
             }
+        });
+
+        search_filters_container.find('a.more_link').click(function(){
+            $(this).parents('ul.simple_facet_links').find('li.more').not('.zero').css('display', 'inline-block');
+            $(this).hide();
+        });
+        search_filters_container.find('a.less_link').click(function(){
+            $(this).parents('ul.simple_facet_links').find('li.more').hide();
+            $(this).parents('ul.simple_facet_links').find('a.more_link').css('display', 'inline-block');
         });
 
         return this

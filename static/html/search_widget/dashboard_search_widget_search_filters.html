@@ -23,10 +23,24 @@
     {{each(index, facet_group) facet_groups}}
         <li class="action_filter"  data-facet_values="[]" data-facet_name="${facet_group.name}" >
             <label>Filter by ${facet_group.display_name}</label>
-            <ul>
+            <ul class="simple_facet_links">
                 <li><a class="simple_facet_link all selected">all</a></li>
                 {{each(index, facet) facet_group.facets}}
-                    <li><a class="simple_facet_link" data-facet_value="${facet.name}">${facet.name} (<span class="count">${facet.count}</span>)</a></li>
+                    {{if index == 10}}
+                        <li>
+                            <a class="more_link closed">more &#x25BC;</a>
+                        </li>
+                    {{/if}}
+                    <li class="{{if facet.count == 0}}zero{{/if}} {{if index >= 10}}more{{/if}}">
+                        <a class="simple_facet_link" data-facet_value="${facet.name}">
+                            ${facet.name} (<span class="count">${facet.count}</span>)
+                        </a>
+                    </li>
+                    {{if index > 10 && index == facet_group.facets.length - 1}}
+                        <li class="more">
+                            <a class="less_link">less &#x25B2;</a>
+                        </li>
+                    {{/if}}
                 {{/each}}
             </ul>
         </li>
