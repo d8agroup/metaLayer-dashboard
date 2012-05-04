@@ -163,7 +163,6 @@
             var dashboard_search_widget = this;
             var configuration = dashboard_search_widget.data('configuration');
             var new_actions = [];
-            var name_of_removed_action = '';
             for (var x=0; x<configuration.actions.length; x++)
                 if (configuration.actions[x].id != action_id)
                     new_actions[new_actions.length] = configuration.actions[x];
