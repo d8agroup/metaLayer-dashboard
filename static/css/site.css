@@ -219,3 +219,7 @@ ON EXIT MODAL
 #providentia_header.menu_container ul li a { display:inline-block; padding:7px; color:#FFF; font-size:80%; font-weight:normal !important; }
 #providentia_header.menu_container ul li a:hover { background-color:#50294C; color:#FFF; box-shadow:0px 0px 4px #FFF; -moz-box-shadow:0px 0px 4px #FFF; -webkit-box-shadow:0px 0px 4px #FFF; text-decoration:none; }
 #page_container { margin-top:70px;}
+
+#branding { position:fixed; bottom:20px; right:20px;}
+#branding a { color:#F8F6F6; font-size:100%; text-align:right; text-shadow: 0px 1px 1px #AAA; }
+#branding a:hover { color:#555; text-align:right; text-shadow: 0px 1px 1px #CCC; text-decoration:none;}
