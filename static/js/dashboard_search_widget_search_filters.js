@@ -179,10 +179,17 @@
             var filter_name = data.filter_name;
             var filter_value = data.filter_value;
             var all_action_filters = container.find('.action_filter');
-            for (var x=0; x<all_action_filters.length; x++)
-                if ($(all_action_filters[x]).data('facet_name') == filter_name)
+            for (var x=0; x<all_action_filters.length; x++) {
+                if ($(all_action_filters[x]).data('facet_name') == filter_name) {
+                    var existing_filter_values = $(all_action_filters[x]).data('facet_values');
+                    for (var y=0; y<existing_filter_values.length; y++)
+                        if (existing_filter_values[y] == filter_value)
+                            return container;
                     $(all_action_filters[x]).data('facet_values').push(filter_value);
+                }
+            }
             container.find('a.save').click();
+            return container;
         }
     };
 

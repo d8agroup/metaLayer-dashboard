@@ -218,3 +218,4 @@ ON EXIT MODAL
 .ui-dialog-titlebar.ui-corner-all, .ui-dialog.ui-corner-all { -moz-border-radius-bottomleft: 0px; -webkit-border-bottom-left-radius: 0px; -khtml-border-bottom-left-radius: 0px; border-bottom-left-radius: 0px; }
 .ui-dialog-titlebar.ui-corner-all, .ui-dialog.ui-corner-all { -moz-border-radius-bottomright: 0px; -webkit-border-bottom-right-radius: 0px; -khtml-border-bottom-right-radius: 0px; border-bottom-right-radius: 0px; }
 .ui-state-active { background: #1a1a1a none !important; }
+
