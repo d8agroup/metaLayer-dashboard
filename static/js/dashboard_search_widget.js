@@ -170,6 +170,11 @@
             dashboard_search_widget.data('configuration').search_filters = {};
             dashboard_search_widget.parents('.collection_container').dashboard_collection('render');
             return dashboard_search_widget;
+        },
+        apply_search_filter:function(data){
+            var container = this;
+            container.find('.search_filters').dashboard_search_widget_search_filters('apply_search_filter', data);
+            return container;
         }
     };
 

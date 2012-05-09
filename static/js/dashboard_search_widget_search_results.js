@@ -34,6 +34,15 @@
             {
                 var search_results_content_items_html = $('<ul class="content_items"></ul>');
                 search_results_container.append(search_results_content_items_html.dashboard_search_results_content_items({search_results:search_results, search_actions:search_actions}));
+                search_results_container.find('.action_inline_filter').click(function(event){
+                    event.preventDefault();
+                    var link = $(this);
+                    var data = {
+                        filter_name: link.data('facet_name'),
+                        filter_value: link.data('facet_value')
+                    };
+                    link.parents('.collection_container').dashboard_collection('apply_search_filter', data);
+                })
             }
             return search_results_container;
         }

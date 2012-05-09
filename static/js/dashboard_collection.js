@@ -269,6 +269,11 @@
             collection.find('.visualizations_container').dashboard_visualizations('capture_snapshots');
             collection.find('.visualizations_container').dashboard_visualizations('update');
             collection.find('.ouputs_container').dashboard_outputs(configuration);
+        },
+        apply_search_filter:function(data) {
+            var container = this;
+            container.find('.search_widget').dashboard_search_widget('apply_search_filter', data);
+            return container;
         }
     };
 
