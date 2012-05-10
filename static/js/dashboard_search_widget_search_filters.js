@@ -4,7 +4,13 @@
 (function( $ )
 {
     var methods = {
-        init:function(data) {
+        init:function(data){
+
+            var container = this;
+            container.dashboard_search_widget_search_filters('render_full_display', data);
+
+        },
+        render_full_display:function(data) {
             var search_filters_container = this;
             var search_results = data.search_results;
             var search_filters = data.search_filters;
@@ -28,10 +34,61 @@
                 });
             }
 
+            var active_search_filters = [];
+            if (data.search_filters != null) {
+
+                //Check if time is active
+                var time_parts = (data.search_filters.time != null) ? data.search_filters.time.split('%20TO%20') : null;
+                if (time_parts != null && time_parts.length == 2) {
+                    var base_start_time = data.base_search_configuration.search_start_time;
+                    var base_end_time = data.base_search_configuration.search_end_time;
+                    var start_time = time_parts[0].replace('[', '');
+                    var end_time = time_parts[1].replace(']', '');
+                    if (base_start_time != start_time || base_end_time != end_time){
+                        var display_start_time = (start_time == '*') ? 'Historic' : display_time2(parseInt(start_time));
+                        var display_end_time = (end_time == '*') ? 'Now' : display_time2(parseInt(end_time));
+                        active_search_filters.push({
+                            name:'time',
+                            display_name:'Time',
+                            value:display_start_time + " to " + display_end_time
+                        });
+                    }
+                }
+
+                //Check if keywords are active
+                if (data.search_filters.keywords > '') {
+                    active_search_filters.push({
+                        name:'keywords',
+                        display_name:'Keywords',
+                        value:data.search_filters.keywords
+                    });
+                }
+
+                //Check action filters
+                for (var filter in data.search_filters) {
+                    if (filter.indexOf('action_') === 0) {
+                        var filter_name_parts = filter.split('_');
+                        if (filter_name_parts.length != 4)
+                            continue;
+
+                        var filter_name = filter_name_parts[2];
+                        var filter_value = data.search_filters[filter];
+                        if (filter_value == null || filter_value == '')
+                            continue;
+                        active_search_filters.push({
+                            name:filter_name,
+                            display_name:filter_name,
+                            value:filter_value.replace(/%20AND%20/g, ' <span class="and">and</span> ')
+                        });
+                    }
+                }
+            }
+
             var template_data = {
                 keywords:search_results.keywords,
                 pagination:search_results.pagination,
                 facet_groups:search_results.facet_groups,
+                active_search_filters:active_search_filters,
                 items_shown:(search_results.pagination.total > search_results.pagination.pagesize)
                     ? search_results.pagination.pagesize
                     : search_results.pagination.total
@@ -123,6 +180,12 @@
                         search_filters_container.parents('.collection_container').dashboard_collection('render');
                     }
                 );
+
+            search_filters_container.find('a.close').click(function(){
+                search_filters_container.find('.search_filters_controls').slideUp();
+                search_filters_container.find('.search_filters_summary').slideDown();
+            });
+
             search_filters_container.find('a.remove_keyword_filter').click
                 (
                     function()
@@ -170,6 +233,15 @@
             search_filters_container.find('a.less_link').click(function(){
                 $(this).parents('ul.simple_facet_links').find('li.more').hide();
                 $(this).parents('ul.simple_facet_links').find('a.more_link').css('display', 'inline-block');
+            });
+
+            search_filters_container.find('.search_filters_summary a.open').click(function(){
+                search_filters_container.find('.search_filters_controls').slideDown();
+                search_filters_container.find('.search_filters_summary').slideUp();
+            });
+
+            search_filters_container.find('a.clear').click(function(){
+                search_filters_container.parents('.collection_container').dashboard_collection('reset_search_filters');
             });
 
             return this

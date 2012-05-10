@@ -274,6 +274,15 @@
             var container = this;
             container.find('.search_widget').dashboard_search_widget('apply_search_filter', data);
             return container;
+        },
+        reset_search_filters:function(){
+            var dashboard_collection = this;
+            var configuration = dashboard_collection.data('configuration');
+            configuration.search_filters = {
+                keywords:'',
+                time:'[' + configuration.base_search_configuration.search_start_time + '%20TO%20' + configuration.base_search_configuration.search_end_time + ']'
+            };
+            dashboard_collection.dashboard_collection('render');
         }
     };
 

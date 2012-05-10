@@ -127,7 +127,7 @@
             };
 
             var dashboard_search_widget = this;
-            if(dashboard_search_widget.find('.search_filters').is(':visible'))
+            if(dashboard_search_widget.find('.search_filters_controls').is(':visible'))
             {
                 setTimeout(function() { dashboard_search_widget.dashboard_search_widget('run_search') }, 30000);
                 return;
