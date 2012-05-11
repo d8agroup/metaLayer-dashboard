@@ -214,6 +214,7 @@ ON EXIT MODAL
 
 
 #providentia_header.menu_container { position:fixed; right:30px; top:10px; z-index:2000; font-size:120%; }
+#providentia_header.menu_container img { float:right; }
 #providentia_header.menu_container ul { float:left; margin:7px 10px 0 0; display:none; background-color:#333; padding:0 10px; }
 #providentia_header.menu_container ul li { display:inline-block; padding:10px 5px; }
 #providentia_header.menu_container ul li a { display:inline-block; padding:7px; color:#FFF; font-size:80%; font-weight:normal !important; }
