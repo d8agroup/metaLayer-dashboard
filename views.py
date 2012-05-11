@@ -221,7 +221,7 @@ def dashboard_run_visualization(request):
     visualization = json.loads(visualization)
     configuration = {
         'data_points':json.loads(request.POST['data_points']),
-        'search_filters':json.loads(request.POST['search_filters'])
+        'search_filters':json.loads(request.POST['search_filters']),
     }
     vc = VisualizationController(visualization)
     search_query_additions_collection = vc.get_search_query_additions_collection(configuration)
@@ -237,6 +237,7 @@ def dashboard_run_search(request):
     start_time = time.time()
     configuration = {
         'data_points':json.loads(request.POST['data_points']),
+        'actions':json.loads(request.POST['actions']),
         'search_filters':json.loads(request.POST['search_filters'])
     }
     sc = SearchController(configuration)

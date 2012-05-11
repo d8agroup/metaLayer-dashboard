@@ -13,10 +13,16 @@
         var explore_button_click_function = function(button)
         {
             var search_filters = button.parents('.search_widget').find('.search_filters');
-            if (search_filters.is(':visible'))
-                search_filters.slideUp();
-            else
-                search_filters.slideDown();
+            var search_filters_controls = search_filters.find('.search_filters_controls');
+            var search_filters_summary = search_filters.find('.search_filters_summary');
+            if (search_filters_controls.is(':visible')) {
+                search_filters_controls.slideUp();
+                search_filters_summary.slideDown();
+            }
+            else {
+                search_filters_controls.slideDown();
+                search_filters_summary.slideUp();
+            }
         };
 
         var close_button_click_function = function(button)

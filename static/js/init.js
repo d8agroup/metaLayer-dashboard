@@ -116,18 +116,18 @@ $(document).ready
                 "<p>{{html text}}<img src='/static/images/thedashboard/loading_circle.gif' /></p>" +
             "</div>"
         );
-
-        $.get('http://' + html_host + '/static/html/thedashboard/search_widget/dashboard_search_widget_search_filters.html', function(t) { $.template('dashboard_search_widget_search_filters', t)});
-        $.get('http://' + html_host + '/static/html/thedashboard/search_widget/dashboard_search_widget_options_panel.html', function(t) { $.template('dashboard_search_widget_options_panel', t)});
-        $.get('http://' + html_host + '/static/html/thedashboard/search_widget/dashboard_search_widget_data_point.html', function(t) { $.template('dashboard_search_widget_data_point', t)});
-        $.get('http://' + html_host + '/static/html/thedashboard/search_widget/dashboard_search_widget_action.html', function(t) { $.template('dashboard_search_widget_action', t)});
-        $.get('http://' + html_host + '/static/html/thedashboard/data_points/dashboard_unconfigured_data_point.html', function(t) { $.template('dashboard_unconfigured_data_point', t)});
-        $.get('http://' + html_host + '/static/html/thedashboard/actions/dashboard_unconfigured_action.html', function(t) { $.template('dashboard_unconfigured_action', t)});
-        $.get('http://' + html_host + '/static/html/thedashboard/outputs/output_url.html', function(t) { $.template('output_url', t)});
-        $.get('http://' + html_host + '/static/html/thedashboard/visualizations/visualization_header.html', function(t) { $.template('visualization_header', t)});
-        $.get('http://' + html_host + '/static/html/thedashboard/visualizations/visualization_container.html', function(t) { $.template('visualization_container', t)});
-        $.get('http://' + html_host + '/static/html/thedashboard/visualizations/unconfigured_visualization_container.html', function(t) { $.template('unconfigured_visualization_container', t)});
-        $.get('http://' + html_host + '/static/html/thedashboard/visualizations/unconfigurable_visualization_container.html', function(t) { $.template('unconfigurable_visualization_container', t)});
-        $.get('http://' + html_host + '/static/html/thedashboard/modals/api_key_line.html', function(t) { $.template('api_key_line', t)});
+        var time = parseInt(new Date().getTime() * 0.001);
+        $.get('http://' + html_host + '/static/html/thedashboard/search_widget/dashboard_search_widget_search_filters.html?time=' + time, function(t) { $.template('dashboard_search_widget_search_filters', t)});
+        $.get('http://' + html_host + '/static/html/thedashboard/search_widget/dashboard_search_widget_options_panel.html?time=' + time, function(t) { $.template('dashboard_search_widget_options_panel', t)});
+        $.get('http://' + html_host + '/static/html/thedashboard/search_widget/dashboard_search_widget_data_point.html?time=' + time, function(t) { $.template('dashboard_search_widget_data_point', t)});
+        $.get('http://' + html_host + '/static/html/thedashboard/search_widget/dashboard_search_widget_action.html?time=' + time, function(t) { $.template('dashboard_search_widget_action', t)});
+        $.get('http://' + html_host + '/static/html/thedashboard/data_points/dashboard_unconfigured_data_point.html?time=' + time, function(t) { $.template('dashboard_unconfigured_data_point', t)});
+        $.get('http://' + html_host + '/static/html/thedashboard/actions/dashboard_unconfigured_action.html?time=' + time, function(t) { $.template('dashboard_unconfigured_action', t)});
+        $.get('http://' + html_host + '/static/html/thedashboard/outputs/output_url.html?time=' + time, function(t) { $.template('output_url', t)});
+        $.get('http://' + html_host + '/static/html/thedashboard/visualizations/visualization_header.html?time=' + time, function(t) { $.template('visualization_header', t)});
+        $.get('http://' + html_host + '/static/html/thedashboard/visualizations/visualization_container.html?time=' + time, function(t) { $.template('visualization_container', t)});
+        $.get('http://' + html_host + '/static/html/thedashboard/visualizations/unconfigured_visualization_container.html?time=' + time, function(t) { $.template('unconfigured_visualization_container', t)});
+        $.get('http://' + html_host + '/static/html/thedashboard/visualizations/unconfigurable_visualization_container.html?time=' + time, function(t) { $.template('unconfigurable_visualization_container', t)});
+        $.get('http://' + html_host + '/static/html/thedashboard/modals/api_key_line.html?time=' + time, function(t) { $.template('api_key_line', t)});
     }
 );
