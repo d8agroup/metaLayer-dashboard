@@ -59,6 +59,7 @@ def dashboard_load(request, id):
             'api_keys': api_keys,
             'static_host':settings.STATIC_HOST,
             'debug':'on' if settings.DEBUG else 'off',
+            'timestamp':int(time.time())
         },
         context_instance=RequestContext(request))
 
