@@ -84,10 +84,15 @@
                 }
             }
 
+            var facet_groups = [];
+            for (var x=0; x<search_results.facet_groups.length; x++)
+                if (search_results.facet_groups[x].facets.length > 0)
+                    facet_groups.push(search_results.facet_groups[x]);
+
             var template_data = {
                 keywords:search_results.keywords,
                 pagination:search_results.pagination,
-                facet_groups:search_results.facet_groups,
+                facet_groups:facet_groups,
                 active_search_filters:active_search_filters,
                 items_shown:(search_results.pagination.total > search_results.pagination.pagesize)
                     ? search_results.pagination.pagesize
