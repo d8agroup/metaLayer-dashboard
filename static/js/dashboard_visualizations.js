@@ -61,6 +61,9 @@
         {
             var dashboard_visualizations_container = this;
             var visualizations = dashboard_visualizations_container.data('visualizations');
+            if (visualizations == null)
+                return dashboard_visualizations_container;
+
             for (var x=0; x<visualizations.length; x++)
             {
                 var visualization_container = $('#v_' + visualizations[x].id);
@@ -72,6 +75,7 @@
                     visualizations[x]['snapshot'] = visualization_snapshot;
             }
             dashboard_visualizations_container.parents('.dashboard').dashboard('save');
+            return dashboard_visualizations_container;
         }
     }
 
