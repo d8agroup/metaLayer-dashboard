@@ -1,6 +1,7 @@
 from threading import Thread
 from django.contrib import messages
 from django.shortcuts import render_to_response, redirect
+from django.template.loader import render_to_string
 from django.views.decorators.cache import never_cache
 from django.http import HttpResponse
 from django.template import RequestContext
@@ -51,6 +52,13 @@ def dashboard_load(request, id):
         for api_key in raw_api_keys:
             api_keys[api_key['name']] = api_key['api_key']
     api_keys = json.dumps(api_keys)
+
+    try:
+        additional_page_includes = getattr(settings, 'ADDITIONAL_PAGE_INCLUDES')
+        additional_html = ''.join([render_to_string(page) for page in additional_page_includes])
+    except AttributeError:
+        additional_html = ''
+
     return render_to_response(
         'thedashboard/dashboard.html',
         {
@@ -59,7 +67,8 @@ def dashboard_load(request, id):
             'api_keys': api_keys,
             'static_host':settings.STATIC_HOST,
             'debug':'on' if settings.DEBUG else 'off',
-            'timestamp':int(time.time())
+            'timestamp':int(time.time()),
+            'additional_html':additional_html
         },
         context_instance=RequestContext(request))
 
