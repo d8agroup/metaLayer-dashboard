@@ -148,7 +148,7 @@ DASHBOARD
 .search_widget .search_filters .search_filters_summary ul { width:80%; margin:0 auto 10px;}
 .search_widget .search_filters .search_filters_summary ul li { margin-bottom:5px; border-bottom:1px dashed #444; padding-bottom:3px;}
 .search_widget .search_filters .search_filters_summary ul li .filter_name { display:inline-block; min-width:80px;}
-.search_widget .search_filters .search_filters_summary ul li .filter_value { display:inline-block; padding:0 5px; font-weight:bold; }
+.search_widget .search_filters .search_filters_summary ul li .filter_value { padding:0 5px; font-weight:bold; }
 .search_widget .search_filters .search_filters_summary ul li .filter_value .and { font-weight:normal; font-style:italic; font-size:80%;}
 .search_widget .pagination { padding:0 0 15px; text-align:center; font-size:100%; color:#EEE; width:90%; margin:0 auto;}
 .search_widget .search_filters .info { width:80%; margin:0 auto 10px; padding:10px; background-color:#555; border:1px solid #000;}
