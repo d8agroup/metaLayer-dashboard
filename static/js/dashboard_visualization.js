@@ -27,12 +27,15 @@
                         if (configuration.actions[a].configured && configuration.actions[a].content_properties.added != null)
                             for (var cp=0; cp<configuration.actions[a].content_properties.added.length; cp++)
                                 if (visualization.data_dimensions[d].type == configuration.actions[a].content_properties.added[cp].type)
-                                    supported_dimension_values++
+                                    supported_dimension_values++;
+                    for (var b=0; b<configuration.data_points.length; b++)
+                        if (configuration.data_points[b].configured && configuration.data_points[b].meta_data != null)
+                            for (var ex=0; ex<configuration.data_points[b].meta_data.length; ex++)
+                                if (visualization.data_dimensions[b].type == configuration.data_points[b].meta_data[ex].type)
+                                    supported_dimension_values++;
                     if (supported_dimension_values == 0)
                         unconfigurable++;
                 }
-                if (configuration.actions.length == 0)
-                    return true;
                 return unconfigurable > 0;
             };
 
@@ -83,9 +86,9 @@
             if (visualization_is_unconfigurable(visualization_container, visualization))
             {
                 var visualization_html = $.tmpl('unconfigurable_visualization_container', visualization);
-                visualization_html.find('.remove').click(function(e) { remove_click_function(e, visualization_container, visualization); });
                 visualization_container.append(visualization_html);
                 visualization_container.find('.remove, .save').button();
+                visualization_html.find('.remove').click(function(e) { remove_click_function(e, visualization_container, visualization.id); });
                 return visualization_container;
             }
             else if (!visualization.configured)
@@ -111,6 +114,14 @@
                                                 configuration.actions[a].content_properties.added[cp].name,
                                                 configuration.actions[a].content_properties.added[cp].type
                                             )
+                                    };
+                    for (var b=0; b<configuration.data_points.length; b++)
+                        if (configuration.data_points[b].configured && configuration.data_points[b].meta_data != null)
+                            for (var ex=0; ex<configuration.data_points[b].meta_data.length; ex++)
+                                if (visualization.data_dimensions[b].type == configuration.data_points[b].meta_data[ex].type)
+                                    dimension.values[dimension.values.length] = {
+                                        name:configuration.data_points[b].meta_data[ex].display_name,
+                                        value:configuration.data_points[b].meta_data[ex].name
                                     };
                 }
                 var visualization_html = $.tmpl('unconfigured_visualization_container', visualization);

@@ -88,6 +88,18 @@ function search_encode_property(action_name, property_name, property_type)
     return encoded_property
 }
 
+function search_encode_extension_property(extension_name, property_type)
+{
+    var encoded_property = 'extensions_' + extension_name + '_' + property_type;
+    if (property_type == "string")
+        encoded_property += '_s';
+    else if (property_type == 'location_string')
+        encoded_property += '_s';
+    else
+        encoded_property += '_s';
+    return encoded_property
+}
+
 function access_api_key_store_value(key)
 {
     var store = $('#api_key_store').data('store');

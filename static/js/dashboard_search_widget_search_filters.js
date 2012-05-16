@@ -5,10 +5,8 @@
 {
     var methods = {
         init:function(data){
-
             var container = this;
             container.dashboard_search_widget_search_filters('render_full_display', data);
-
         },
         render_full_display:function(data) {
             var search_filters_container = this;
@@ -72,6 +70,21 @@
                             continue;
 
                         var filter_name = filter_name_parts[2];
+                        var filter_value = data.search_filters[filter];
+                        if (filter_value == null || filter_value == '')
+                            continue;
+                        active_search_filters.push({
+                            name:filter_name,
+                            display_name:filter_name,
+                            value:filter_value.replace(/%20AND%20/g, ' <span class="and">and</span> ')
+                        });
+                    }
+                    if (filter.indexOf('extensions_') === 0) {
+                        var filter_name_parts = filter.split('_');
+                        if (filter_name_parts.length != 3)
+                            continue;
+
+                        var filter_name = filter_name_parts[1];
                         var filter_value = data.search_filters[filter];
                         if (filter_value == null || filter_value == '')
                             continue;
