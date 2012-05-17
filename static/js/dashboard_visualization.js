@@ -31,7 +31,7 @@
                     for (var b=0; b<configuration.data_points.length; b++)
                         if (configuration.data_points[b].configured && configuration.data_points[b].meta_data != null)
                             for (var ex=0; ex<configuration.data_points[b].meta_data.length; ex++)
-                                if (visualization.data_dimensions[b].type == configuration.data_points[b].meta_data[ex].type)
+                                if (visualization.data_dimensions[d].type == configuration.data_points[b].meta_data[ex].type)
                                     supported_dimension_values++;
                     if (supported_dimension_values == 0)
                         unconfigurable++;

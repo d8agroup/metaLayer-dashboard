@@ -116,6 +116,13 @@ function track_event(category, action, label)
         _gaq.push(['_trackEvent', category, action]);
 }
 
+function display_text_abstract(text) {
+    var all_text = '';
+    for (var x=0; x<text.length; x++)
+        all_text += text[x];
+    return all_text.substring(0, 200) + ' ...'
+}
+
 $(document).ready
 (
     function()
