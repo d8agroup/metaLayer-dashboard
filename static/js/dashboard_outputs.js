@@ -29,7 +29,7 @@
                         '/dashboard/outputs/get_render',
                         {
                             output:JSON.stringify(output),
-                            search_results:JSON.stringify(configuration.search_results),
+                            search_results:JSON.stringify({facet_groups:configuration.search_results.facet_groups, pagination:configuration.search_results.pagination}),
                             csrfmiddlewaretoken:$('#csrf_form input').val()
                         },
                         function(data) {
