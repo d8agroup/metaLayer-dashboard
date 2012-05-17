@@ -172,7 +172,6 @@
                                 '/dashboard/outputs/get_render',
                                 {
                                     output:JSON.stringify(output),
-                                    search_results:JSON.stringify(configuration.search_results),
                                     csrfmiddlewaretoken:$('#csrf_form input').val()
                                 },
                                 function(data) { process_get_render_function(data, configuration, collection); }
