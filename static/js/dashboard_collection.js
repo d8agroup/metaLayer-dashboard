@@ -143,17 +143,41 @@
                         collection.dashboard_collection('render');
                     };
 
+                    var process_get_render_function = function(data, configuration, collection)
+                    {
+                        var output = data.output;
+                        if (configuration.outputs == null)
+                            configuration.outputs = [];
+                        configuration.outputs[configuration.outputs.length] = output;
+                        collection.data('configuration', configuration);
+                        collection.dashboard_collection('render');
+                    };
+
                     var draggable = ui.draggable;
                     var output = clone(draggable.data('output'));
                     output['id'] = guid();
                     output['collection_id'] = configuration.id;
                     output['dashboard_id'] = collection.parents('.dashboard').data('dashboard').id;
-                    $.post
-                        (
-                            '/dashboard/outputs/get_url',
-                            { output:JSON.stringify(output), csrfmiddlewaretoken:$('#csrf_form input').val()},
-                            function(data) { process_get_url_function(data, configuration, collection); }
-                        );
+                    if (output.type == 'url') {
+                        $.post
+                            (
+                                '/dashboard/outputs/get_url',
+                                { output:JSON.stringify(output), csrfmiddlewaretoken:$('#csrf_form input').val()},
+                                function(data) { process_get_url_function(data, configuration, collection); }
+                            );
+                    }
+                    else if (output.type == 'render') {
+                        $.post
+                            (
+                                '/dashboard/outputs/get_render',
+                                {
+                                    output:JSON.stringify(output),
+                                    search_results:JSON.stringify(configuration.search_results),
+                                    csrfmiddlewaretoken:$('#csrf_form input').val()
+                                },
+                                function(data) { process_get_render_function(data, configuration, collection); }
+                            )
+                    }
                     track_event('output', 'added', output.name);
                 };
 

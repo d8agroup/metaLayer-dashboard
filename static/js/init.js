@@ -143,6 +143,7 @@ $(document).ready
         $.get('http://' + html_host + '/static/html/thedashboard/data_points/dashboard_unconfigured_data_point.html?time=' + time, function(t) { $.template('dashboard_unconfigured_data_point', t)});
         $.get('http://' + html_host + '/static/html/thedashboard/actions/dashboard_unconfigured_action.html?time=' + time, function(t) { $.template('dashboard_unconfigured_action', t)});
         $.get('http://' + html_host + '/static/html/thedashboard/outputs/output_url.html?time=' + time, function(t) { $.template('output_url', t)});
+        $.get('http://' + html_host + '/static/html/thedashboard/outputs/output_render.html?time=' + time, function(t) { $.template('output_render', t)});
         $.get('http://' + html_host + '/static/html/thedashboard/visualizations/visualization_header.html?time=' + time, function(t) { $.template('visualization_header', t)});
         $.get('http://' + html_host + '/static/html/thedashboard/visualizations/visualization_container.html?time=' + time, function(t) { $.template('visualization_container', t)});
         $.get('http://' + html_host + '/static/html/thedashboard/visualizations/unconfigured_visualization_container.html?time=' + time, function(t) { $.template('unconfigured_visualization_container', t)});
