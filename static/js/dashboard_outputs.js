@@ -23,6 +23,7 @@
                 output_html = $.tmpl('output_url', output);
             }
             else if (output.type == 'render') {
+                output.html = '<div class="loading">Waiting for data <img src="/static/images/thedashboard/loading_circle.gif" />';
                 output_html = $.tmpl('output_render', output);
                 $.post
                     (
