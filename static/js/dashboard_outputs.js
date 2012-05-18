@@ -14,6 +14,10 @@
 
         var dashboard_outputs_container = this;
         var outputs = configuration.outputs;
+
+        if (outputs == null)
+            return;
+
         for (var x=0; x<outputs.length; x++)
         {
             var output = outputs[x];

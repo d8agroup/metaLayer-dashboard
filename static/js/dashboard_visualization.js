@@ -118,11 +118,22 @@
                     for (var b=0; b<configuration.data_points.length; b++)
                         if (configuration.data_points[b].configured && configuration.data_points[b].meta_data != null)
                             for (var ex=0; ex<configuration.data_points[b].meta_data.length; ex++)
-                                if (visualization.data_dimensions[b].type == configuration.data_points[b].meta_data[ex].type)
+                                if (dimension_type == configuration.data_points[b].meta_data[ex].type)
                                     dimension.values[dimension.values.length] = {
                                         name:configuration.data_points[b].meta_data[ex].display_name,
                                         value:configuration.data_points[b].meta_data[ex].name
                                     };
+
+                    var un_duped_dimension_values = []
+                    for (var dv=0; dv<dimension.values.length; dv++) {
+                        var should_be_added = true;
+                        for (var ud=0; ud<un_duped_dimension_values.length; ud++)
+                            if (dimension.values[dv].name == un_duped_dimension_values[ud].name)
+                                should_be_added = false;
+                        if (should_be_added == true)
+                            un_duped_dimension_values[un_duped_dimension_values.length] = dimension.values[dv];
+                    }
+                    dimension.values = un_duped_dimension_values;
                 }
                 var visualization_html = $.tmpl('unconfigured_visualization_container', visualization);
                 visualization_html.find('.remove').click(function(e) { remove_click_function(e, visualization_container, visualization.id); });
