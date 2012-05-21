@@ -65,6 +65,16 @@
             </li>
         {{/each}}
     </ul>
+    <ul class="action_range_filters">
+        {{each(index, facet_range_group) facet_range_groups}}
+            <li class="action_range_filter ${facet_range_group.name}" data-facet_name="${facet_range_group.name}">
+                <label>Filter by ${facet_range_group.display_name}:<span class="range"></span></label>
+                <div class="action_range_slider_container">
+                    <div class="action_range_slider"></div>
+                </div>
+            </li>
+        {{/each}}
+    </ul>
     <div class="actions">
         <a class="button close">close filters</a>
         <a class="button clear">clear all filters</a>

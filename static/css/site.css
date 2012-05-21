@@ -168,6 +168,11 @@ DASHBOARD
 .search_widget .search_filters .action_filters .action_filter ul li a { color:#999; }
 .search_widget .search_filters .action_filters .action_filter ul li a:hover { color:#FFF; text-decoration:none; }
 .search_widget .search_filters .action_filters .action_filter ul li a.selected { color:#FFF;  }
+.search_widget .search_filters .action_range_filters { width:80%; margin:0 auto; }
+.search_widget .search_filters .action_range_filters .action_range_filter { margin:10px auto 0; border-bottom:1px dashed #444; padding-bottom:10px;}
+.search_widget .search_filters .action_range_filters .action_range_filter .range { font-weight:bold; position:relative; left:10px; }
+.search_widget .search_filters .action_range_filters .action_range_filter .action_range_slider_container { width:98%; margin:10px auto 0; }
+
 
 .search_widget .search_results_container { height:274px; overflow:auto; }
 .search_widget .search_results_container .waiting { width:100%; height:100%; opacity:0.7; padding-top:95px; top:0px; display:none; }

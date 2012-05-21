@@ -123,6 +123,15 @@ function display_text_abstract(text) {
     return all_text.substring(0, 200) + ' ...'
 }
 
+function extract_facet_display_name(facet_name) {
+    var name_parts = facet_name.split('_');
+    if (name_parts.length == 3)
+        return name_parts[1];
+    if (name_parts.length == 4)
+        return name_parts[2];
+    return facet_name;
+}
+
 $(document).ready
 (
     function()
