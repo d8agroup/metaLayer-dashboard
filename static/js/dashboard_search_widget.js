@@ -15,7 +15,6 @@
         {
             var dashboard_search_widget = this;
             var configuration = dashboard_search_widget.data('configuration');
-
             //Calculate the base start and end time for this collection search based on the data points
             if (configuration.base_search_configuration == null)
                 configuration.base_search_configuration = {};
@@ -102,6 +101,29 @@
                     configuration.search_results = search_results;
                     var search_filters = configuration.search_filters;
                     var base_search_configuration = configuration.base_search_configuration;
+
+                    if (base_search_configuration.facet_range_groups == null)
+                        base_search_configuration.facet_range_groups = {};
+
+                    if (search_results.stats == null) {
+                        base_search_configuration.facet_range_groups = {}
+                    }
+                    else {
+                        var stats_keys = Object.keys(search_results.stats);
+                        for (var x=0; x<stats_keys.length; x++) {
+                            var stat = stats_keys[x];
+                            if (base_search_configuration.facet_range_groups[stat] == null)
+                                base_search_configuration.facet_range_groups[stat] = {};
+                            if (base_search_configuration.facet_range_groups[stat].min == null || search_filters[stat] == null)
+                                base_search_configuration.facet_range_groups[stat].min = search_results.stats[stat].min;
+
+                            if (base_search_configuration.facet_range_groups[stat] == null)
+                                base_search_configuration.facet_range_groups[stat] = {};
+                            if(base_search_configuration.facet_range_groups[stat].max == null || search_filters[stat] == null)
+                                base_search_configuration.facet_range_groups[stat].max = search_results.stats[stat].max;
+                        }
+                    }
+
                     var actions = configuration.actions;
                     search_widget.find('.search_results_container').dashboard_search_results({search_results:search_results, search_filters:search_filters, actions:actions});
                     search_widget.find('.search_filters').dashboard_search_widget_search_filters({search_results:search_results, search_filters:search_filters, base_search_configuration:base_search_configuration});

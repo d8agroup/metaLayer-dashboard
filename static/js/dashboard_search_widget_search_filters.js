@@ -5,10 +5,8 @@
 {
     var methods = {
         init:function(data){
-
             var container = this;
             container.dashboard_search_widget_search_filters('render_full_display', data);
-
         },
         render_full_display:function(data) {
             var search_filters_container = this;
@@ -81,6 +79,21 @@
                             value:filter_value.replace(/%20AND%20/g, ' <span class="and">and</span> ')
                         });
                     }
+                    if (filter.indexOf('extensions_') === 0) {
+                        var filter_name_parts = filter.split('_');
+                        if (filter_name_parts.length != 3)
+                            continue;
+
+                        var filter_name = filter_name_parts[1];
+                        var filter_value = data.search_filters[filter];
+                        if (filter_value == null || filter_value == '')
+                            continue;
+                        active_search_filters.push({
+                            name:filter_name,
+                            display_name:filter_name,
+                            value:filter_value.replace(/%20AND%20/g, ' <span class="and">and</span> ').replace(/%20TO%20/g, ' <span class="and">to</span> ').replace('[', '').replace(']', '')
+                        });
+                    }
                 }
             }
 
@@ -89,10 +102,25 @@
                 if (search_results.facet_groups[x].facets.length > 0)
                     facet_groups.push(search_results.facet_groups[x]);
 
+            var facet_range_groups = [];
+            var stats_keys = Object.keys(search_results.stats);
+            for (var x=0; x<stats_keys.length; x++) {
+                var range_facet_group_name = stats_keys[x];
+                facet_range_groups.push({
+                    name:range_facet_group_name,
+                    display_name:extract_facet_display_name(range_facet_group_name),
+                    min_base:base_search_configuration.facet_range_groups[range_facet_group_name].min,
+                    min:search_results.stats[range_facet_group_name].min,
+                    max_base:base_search_configuration.facet_range_groups[range_facet_group_name].max,
+                    max:search_results.stats[range_facet_group_name].max
+                })
+            }
+
             var template_data = {
                 keywords:search_results.keywords,
                 pagination:search_results.pagination,
                 facet_groups:facet_groups,
+                facet_range_groups:facet_range_groups,
                 active_search_filters:active_search_filters,
                 items_shown:(search_results.pagination.total > search_results.pagination.pagesize)
                     ? search_results.pagination.pagesize
@@ -138,21 +166,40 @@
             }
 
             search_filters_container.find('.daterange .range').html(display_time2(search_filter_start_time) + ' to ' + ((search_filter_end_time == base_search_end_time) ? 'Now' : display_time2(search_filter_end_time)));
-            search_filters_container.find('.daterange .slider').slider
-                (
+            search_filters_container.find('.daterange .slider').slider({
+                range:true,
+                min:base_search_start_time,
+                max:base_search_end_time,
+                values:[search_filter_start_time,search_filter_end_time],
+                slide:function(event, ui)
+                {
+                    var start = ui.values[0];
+                    var end = ui.values[1];
+                    $(ui.handle).parents('.collection_container').find('.daterange .range').html(display_time2(start) + ' to ' + ((end == base_search_end_time) ? 'Now' : display_time2(end)));
+                }
+            });
+
+            var stats_keys = Object.keys(search_results.stats);
+            for (var x=0; x<stats_keys.length; x++) {
+                var facet_range_group_name = stats_keys[x];
+                var range_facet_group = search_results.stats[facet_range_group_name];
+                var base_facet_group = base_search_configuration.facet_range_groups[facet_range_group_name];
+                search_filters_container.find('.action_range_filter.' + facet_range_group_name + ' .range').html(range_facet_group.min + " to " + range_facet_group.max)
+                search_filters_container.find('.action_range_filter.' + facet_range_group_name + ' .action_range_slider').slider({
+                    range:true,
+                    min:base_facet_group.min,
+                    max:base_facet_group.max,
+                    values:[range_facet_group.min, range_facet_group.max],
+                    slide:function(event, ui)
                     {
-                        range:true,
-                        min:base_search_start_time,
-                        max:base_search_end_time,
-                        values:[search_filter_start_time,search_filter_end_time],
-                        slide:function(event, ui)
-                        {
-                            var start = ui.values[0];
-                            var end = ui.values[1];
-                            $(ui.handle).parents('.collection_container').find('.daterange .range').html(display_time2(start) + ' to ' + ((end == base_search_end_time) ? 'Now' : display_time2(end)));
-                        }
+                        var start = ui.values[0];
+                        var end = ui.values[1];
+                        $(ui.handle).parents('.action_range_filter').find('.range').html(start + ' to ' + end);
                     }
-                );
+                });
+            }
+
+
             search_filters_container.find('a.save').click
                 (
                     function()
@@ -180,6 +227,18 @@
                             var facet_value_string = facet_values.join('%20AND%20');
                             var facet_name = $(simple_action_filters[x]).data('facet_name');
                             search_filters_container.data('search_filters')[facet_name] = facet_value_string;
+                        }
+
+                        var action_range_filters = search_filters_container.find('.action_range_filter');
+                        for (var x=0; x<action_range_filters.length; x++) {
+                            var facet_name = $(action_range_filters[x]).data('facet_name');
+                            var base_min = $(action_range_filters[x]).find('.action_range_slider').slider('option', 'min');
+                            var base_max = $(action_range_filters[x]).find('.action_range_slider').slider('option', 'max');
+                            var min = $(action_range_filters[x]).find('.action_range_slider').slider('values', 0);
+                            var max = $(action_range_filters[x]).find('.action_range_slider').slider('values', 1);
+                            if (min == base_min && max == base_max)
+                                continue;
+                            search_filters_container.data('search_filters')[facet_name] = '[' + min + '%20TO%20' + max + ']';
                         }
 
                         search_filters_container.parents('.collection_container').dashboard_collection('render');

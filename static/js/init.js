@@ -88,6 +88,18 @@ function search_encode_property(action_name, property_name, property_type)
     return encoded_property
 }
 
+function search_encode_extension_property(extension_name, property_type)
+{
+    var encoded_property = 'extensions_' + extension_name + '_' + property_type;
+    if (property_type == "string")
+        encoded_property += '_s';
+    else if (property_type == 'location_string')
+        encoded_property += '_s';
+    else
+        encoded_property += '_s';
+    return encoded_property
+}
+
 function access_api_key_store_value(key)
 {
     var store = $('#api_key_store').data('store');
@@ -102,6 +114,22 @@ function track_event(category, action, label)
         _gaq.push(['_trackEvent', category, action, label]);
     else
         _gaq.push(['_trackEvent', category, action]);
+}
+
+function display_text_abstract(text) {
+    var all_text = '';
+    for (var x=0; x<text.length; x++)
+        all_text += text[x];
+    return all_text.substring(0, 200) + ' ...'
+}
+
+function extract_facet_display_name(facet_name) {
+    var name_parts = facet_name.split('_');
+    if (name_parts.length == 3)
+        return name_parts[1];
+    if (name_parts.length == 4)
+        return name_parts[2];
+    return facet_name;
 }
 
 $(document).ready
@@ -124,6 +152,7 @@ $(document).ready
         $.get('http://' + html_host + '/static/html/thedashboard/data_points/dashboard_unconfigured_data_point.html?time=' + time, function(t) { $.template('dashboard_unconfigured_data_point', t)});
         $.get('http://' + html_host + '/static/html/thedashboard/actions/dashboard_unconfigured_action.html?time=' + time, function(t) { $.template('dashboard_unconfigured_action', t)});
         $.get('http://' + html_host + '/static/html/thedashboard/outputs/output_url.html?time=' + time, function(t) { $.template('output_url', t)});
+        $.get('http://' + html_host + '/static/html/thedashboard/outputs/output_render.html?time=' + time, function(t) { $.template('output_render', t)});
         $.get('http://' + html_host + '/static/html/thedashboard/visualizations/visualization_header.html?time=' + time, function(t) { $.template('visualization_header', t)});
         $.get('http://' + html_host + '/static/html/thedashboard/visualizations/visualization_container.html?time=' + time, function(t) { $.template('visualization_container', t)});
         $.get('http://' + html_host + '/static/html/thedashboard/visualizations/unconfigured_visualization_container.html?time=' + time, function(t) { $.template('unconfigured_visualization_container', t)});

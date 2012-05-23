@@ -42,6 +42,10 @@
                         filter_value: link.data('facet_value')
                     };
                     link.parents('.collection_container').dashboard_collection('apply_search_filter', data);
+                });
+                search_results_container.find('.action_inline_range_filter').click(function(event){
+                    event.preventDefault();
+                    $(this).parents('.collection_container').find('.explore_data').click();
                 })
             }
             return search_results_container;

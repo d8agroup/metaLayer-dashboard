@@ -205,6 +205,17 @@ def dashboard_get_output_url(request):
     return JSONResponse({'output':output})
 
 @login_required(login_url='/')
+def dashboard_get_output_render(request):
+    output = request.POST['output']
+    output = json.loads(output)
+    search_results = request.POST.get('search_results')
+    search_results = json.loads(search_results) if search_results else {}
+    oc = OutputController(output)
+    html = oc.generate_html(search_results)
+    output['html'] = html
+    return JSONResponse({'output':output})
+
+@login_required(login_url='/')
 def dashboard_output_removed(request):
     Logger.Info('%s - dashboard_output_removed - started' % __name__)
     output = request.POST['output']
