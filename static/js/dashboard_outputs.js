@@ -13,6 +13,10 @@
         };
 
         var dashboard_outputs_container = this;
+
+        if (typeof(configuration) === 'undefined')
+            return;
+
         var outputs = configuration.outputs;
 
         if (outputs == null)
