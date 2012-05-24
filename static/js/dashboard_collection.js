@@ -51,7 +51,7 @@
                 outputs_container_html.dashboard_outputs(configuration);
                 dashboard_collection.append(outputs_container_html);
 
-                dashboard_collection.draggable( { revert:true, stack:'.collection_container', handle:'.search_widget' } );
+                dashboard_collection.draggable( { revert:true, stack:'.collection_container', handle:'.data_points_and_actions_container' } );
             }
             dashboard_collection.dashboard_collection('apply_dashboard_collection_droppable');
             dashboard_collection.dashboard_collection('apply_widget_droppable');

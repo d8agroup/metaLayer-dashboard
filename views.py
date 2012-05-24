@@ -59,6 +59,11 @@ def dashboard_load(request, id):
     except AttributeError:
         additional_html = ''
 
+    try:
+        stats_assets_refresh_timestamp = getattr(settings, 'DEPLOYMENT_TIMESTAMP')
+    except AttributeError:
+        stats_assets_refresh_timestamp = int(time.time())
+
     return render_to_response(
         'thedashboard/dashboard.html',
         {
@@ -67,7 +72,7 @@ def dashboard_load(request, id):
             'api_keys': api_keys,
             'static_host':settings.STATIC_HOST,
             'debug':'on' if settings.DEBUG else 'off',
-            'timestamp':int(time.time()),
+            'timestamp': stats_assets_refresh_timestamp,
             'additional_html':additional_html
         },
         context_instance=RequestContext(request))
