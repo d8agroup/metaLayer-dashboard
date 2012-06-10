@@ -4,5 +4,51 @@
     </a>
     <h3>${display_name_long}</h3>
     <p class="instructions">{{html instructions}}</p>
-    <p class="url">${url}</p>
-</div> 
+    {{if !export_count || export_count <= 100}}
+        <table>
+            <tr>
+                <td class="instructions" colspan="2">Click the link below to download the results in Excel format</td>
+            </tr>
+            <tr>
+                <td class="url_instructions"><span class="arrow">&rarr;</span>Export all ${export_count} items</td>
+                <td class="url"><a href="${url}" target='_blank'>${url}</a></td>
+            </tr>
+        </table>
+    {{/if}}
+    
+    {{if export_count > 100 && export_count <= 1000}}
+        <table>
+            <tr>
+                <td class="instructions" colspan="2">Click one of the links below to download the results in Excel format</td>
+            </tr>
+            <tr>
+                <td class="url_instructions"><span class="arrow">&rarr;</span>Export the latest 100 items</td>
+                <td class="url"><a href="${url}" target='_blank'>${url}</a></td>
+            </tr>
+            <tr>
+                <td class="url_instructions"><span class="arrow">&rarr;</span>Export all ${export_count} items</td>
+                <td class="url"><a href="${url}?limit=${export_count}" target='_blank'>${url}</a></td>
+            </tr>
+        </table>
+    {{/if}}
+    
+    {{if export_count > 1000}}
+        <table>
+            <tr>
+                <td class="instructions" colspan="2">Click one of the links below to download the results in Excel format</td>
+            </tr>
+            <tr>
+                <td class="url_instructions"><span class="arrow">&rarr;</span>Export the latest 100 items</td>
+                <td class="url"><a href="${url}" target='_blank'>${url}</a></td>
+            </tr>
+            <tr>
+                <td class="url_instructions"><span class="arrow">&rarr;</span>Export the latest 1000 items</td>
+                <td class="url"><a href="${url}?limit=1000" target='_blank'>${url}</a></td>
+            </tr>
+            <tr>
+                <td class="url_instructions"><span class="arrow">&rarr;</span>Export all ${export_count} items <em>Caution: Large files can take several minutes to download</em></td>
+                <td class="url"><a href="${url}?limit=${export_count}" target='_blank'>${url}</a></td>
+            </tr>
+        </table>
+    {{/if}}
+</div>

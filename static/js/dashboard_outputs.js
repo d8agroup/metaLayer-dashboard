@@ -12,10 +12,13 @@
             track_event('output', 'removed', output.name);
         };
 
-        var dashboard_outputs_container = this;
-
         if (typeof(configuration) === 'undefined')
             return;
+
+        var dashboard_outputs_container = this;
+        dashboard_outputs_container.children().remove();
+        if (configuration.search_results.pagination)
+            var export_count = configuration.search_results.pagination.total;
 
         var outputs = configuration.outputs;
 
@@ -25,6 +28,7 @@
         for (var x=0; x<outputs.length; x++)
         {
             var output = outputs[x];
+            output['export_count'] = export_count;
             var output_html = '';
 
             if (output.type == 'url') {
