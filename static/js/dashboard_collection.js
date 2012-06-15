@@ -122,6 +122,9 @@
                                     action:JSON.stringify(action),
                                     data_points:JSON.stringify(configuration.data_points),
                                     csrfmiddlewaretoken:$('#csrf_form input').val()
+                                },
+                                function() {
+                                    collection.dashboard_collection('render');
                                 }
                             );
                     }
