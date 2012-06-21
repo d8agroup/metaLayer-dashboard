@@ -48,10 +48,10 @@
                 visualizations_container_html.dashboard_visualizations(configuration);
 
                 var outputs_container_html = $("<div class='outputs_container'></div>");
-                outputs_container_html.dashboard_outputs(configuration);
                 dashboard_collection.append(outputs_container_html);
+                outputs_container_html.dashboard_outputs(configuration);
 
-                dashboard_collection.draggable( { revert:true, stack:'.collection_container', handle:'.search_widget' } );
+                dashboard_collection.draggable( { revert:true, stack:'.collection_container', handle:'.data_points_and_actions_container' } );
             }
             dashboard_collection.dashboard_collection('apply_dashboard_collection_droppable');
             dashboard_collection.dashboard_collection('apply_widget_droppable');
@@ -122,6 +122,9 @@
                                     action:JSON.stringify(action),
                                     data_points:JSON.stringify(configuration.data_points),
                                     csrfmiddlewaretoken:$('#csrf_form input').val()
+                                },
+                                function() {
+                                    collection.dashboard_collection('render');
                                 }
                             );
                     }
@@ -291,7 +294,7 @@
             var configuration = collection.data('configuration');
             collection.find('.visualizations_container').dashboard_visualizations('capture_snapshots');
             collection.find('.visualizations_container').dashboard_visualizations('update');
-            collection.find('.ouputs_container').dashboard_outputs(configuration);
+            collection.find('.outputs_container').dashboard_outputs(configuration);
         },
         apply_search_filter:function(data) {
             var container = this;

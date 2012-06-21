@@ -182,12 +182,22 @@ DASHBOARD
 .search_widget .content_items li .actions { display:none; }
 .search_widget .content_items li .actions li { padding:0 0 5px 0; }
 
-.output { background-color:#333; margin:2px; }
+.output { background-color:#333; margin:2px; padding-bottom:10px;}
 .output .remove { float:right; padding:2px; }
 .output_url h3 { text-align:center;font-size:200%; padding-top:30px;}
 .output_url p { text-align:center; }
 .output_url p.instructions { font-size:60%;}
-.output_url p.url { padding:10px 0 30px 0; font-size:80%;}
+.output_url p.url_instructions { padding:10px 0 0; font-size:75%; font-style:italic;}
+.output_url p.url { padding:5px 0 25px 0; font-size:80%;}
+
+.output_url table { margin:10px auto; font-size:80%; width:90%;}
+.output_url table td { padding:5px 0;}
+.output_url table td.instructions { text-align:center; font-style:italic; }
+.output_url table td.url { width:230px; text-align:right;}
+.output_url table td.url_instructions .arrow { float:right; position:relative; bottom:2px;}
+.output_url table td.url_instructions em { display:block; font-weight:bold; width:90%; padding:5px;}
+
+
 .output_render { min-height:200px;}
 .output_render h3 { text-align:center;font-size:200%; padding-top:30px;}
 .output_render .loading { text-align:center; font-size:140%; margin-top:40px;}
