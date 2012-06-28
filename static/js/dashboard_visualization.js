@@ -144,6 +144,7 @@
             }
             else
             {
+                visualization.export_link = '/i/s/470/250/' + $('.dashboard').data('dashboard').id + '/' + visualization.id + '.png?as_attachment=true'
                 var visualization_html = $.tmpl('visualization_container', visualization);
                 visualization_container.append(visualization_html);
                 visualization_html.find('.loading').show();

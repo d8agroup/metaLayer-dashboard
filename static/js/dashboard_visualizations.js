@@ -30,7 +30,7 @@
                 visualization_container_html.dashboard_visualization(visualizations[x]);
             }
 
-            return dashboard_visualizations_container;
+            return dashboard_visualizations_container.dashboard_visualizations('capture_snapshots');
         },
         update:function()
         {

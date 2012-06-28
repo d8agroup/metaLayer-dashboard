@@ -2,6 +2,9 @@
     <h3>${display_name_long} {{if filter_message}}<span class="filter_message">${filter_message}</span>{{/if}}</h3>
     <div class="actions">
         <img src="/static/images/thedashboard/icon_clock_loading.gif" title="loading data for this visualization" class='loading'/>
+        <a class="publish" target="_blank" href="${export_link}">
+            <img src="/static/images/thedashboard/icon_export.png" title="Export this visualization" />
+        </a>
         <a class="config">
             <img src="/static/images/thedashboard/icon_config.png" title="Configure this visualization" />
         </a>
