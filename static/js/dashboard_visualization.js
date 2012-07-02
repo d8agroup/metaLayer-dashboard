@@ -168,7 +168,10 @@
                         }
                     );
                 visualization_html.find('.config').click(function(e) { configure_button_clicked(e, visualization_container, visualization.id); });
-                setTimeout(function(){ visualization_html.find('.loading').hide() }, 5000);
+                setTimeout(function(){
+                    visualization_html.find('.loading').hide()
+                    visualization_html.parents('.visualizations_container').dashboard_visualizations('capture_snapshots');
+                }, 5000);
                 return visualization_container;
             }
         }
