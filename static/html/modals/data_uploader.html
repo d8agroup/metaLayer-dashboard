@@ -1,0 +1,33 @@
+<div id="data_uploader" title="Upload Data" class="modal">
+    <div id="data_upload_waiting" class="hidden">
+        <p>Uploading and Processing your data <img src="/static/images/thedashboard/loading_circle.gif" /> </p>
+    </div>
+    <div id="data_upload_stage_1">
+        <div class="instructions">
+            <div class="ui-state-highlight ui-corner-all">
+                <p><span class="ui-icon ui-icon-info"></span>Files must be less than 100MB in size</p>
+            </div>
+            <div class="ui-state-highlight ui-corner-all">
+                <p><span class="ui-icon ui-icon-info"></span>Files must be in CSV format - we're working on more!</p>
+            </div>
+            <div class="ui-state-highlight ui-corner-all">
+                <p><span class="ui-icon ui-icon-info"></span>The first row of the file must contain column headers</p>
+            </div>
+        </div>
+    </div>
+    <div id="data_upload_stage_2" class="hidden">
+        <div id="passed">
+            <p>That's it, were done!</p>
+        </div>
+        <div id="failed">
+            <p class="instruction">Sorry, we could not process your data. Please review the following errors and try again.</p>
+            <ul>
+
+            </ul>
+        </div>
+    </div>
+    <div id="data_upload_file_container">
+        <p>Click the browse button below to select the file containing your own data.</p>
+        <a class="button" id="data_uploader_file"><img src="/static/images/thedashboard/data_points/upload_small.png"><span id="data_uploader_file_text">Choose a file</span></a>
+    </div>
+</div>

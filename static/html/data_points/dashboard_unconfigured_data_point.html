@@ -1,4 +1,4 @@
-<div class='data_point_config'>
+<div class='data_point_config' data-data_point_id='${id}'>
     <div class='image_and_title'>
         <img src='${image_small}' />
         <h3>${full_display_name}</h3>
@@ -22,6 +22,13 @@
                         <input disabled='disabled' type="${element.type}" name="${element.name}" class="${element.name}" value="${access_api_key_store_value($data.type)}"/>
                         <a class="api_key_link">Change</a>
                         <p class="help">Click the 'change' button to open the api key manager</p>
+                    </div>
+                {{/if}}
+                {{if element.type == 'file_upload'}}
+                    <div class="form_row file_upload_row">
+                        <label>${element.display_name}</label>
+                        <a class="file_upload_link">Upload</a>
+                        <p class="help">${element.help}</p>
                     </div>
                 {{/if}}
             {{/each}}

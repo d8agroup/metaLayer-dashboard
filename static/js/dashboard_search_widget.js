@@ -115,12 +115,16 @@
                             if (base_search_configuration.facet_range_groups[stat] == null)
                                 base_search_configuration.facet_range_groups[stat] = {};
                             if (base_search_configuration.facet_range_groups[stat].min == null || search_filters[stat] == null)
-                                base_search_configuration.facet_range_groups[stat].min = search_results.stats[stat].min;
+                                base_search_configuration.facet_range_groups[stat].min = (search_results.stats[stat] != null)
+                                    ? search_results.stats[stat].min
+                                    : 0;
 
                             if (base_search_configuration.facet_range_groups[stat] == null)
                                 base_search_configuration.facet_range_groups[stat] = {};
                             if(base_search_configuration.facet_range_groups[stat].max == null || search_filters[stat] == null)
-                                base_search_configuration.facet_range_groups[stat].max = search_results.stats[stat].max;
+                                base_search_configuration.facet_range_groups[stat].max = (search_results.stats[stat] != null)
+                                    ? search_results.stats[stat].max
+                                    : 0;
                         }
                     }
 

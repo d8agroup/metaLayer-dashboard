@@ -117,6 +117,8 @@ function track_event(category, action, label)
 }
 
 function display_text_abstract(text) {
+    if (text == null)
+        return ''
     var all_text = '';
     for (var x=0; x<text.length; x++)
         all_text += text[x];
@@ -130,6 +132,33 @@ function extract_facet_display_name(facet_name) {
     if (name_parts.length == 4)
         return name_parts[2];
     return facet_name;
+}
+
+function render_dynamic_content_item_actions_and_extensions(data) {
+    var template = "<li class='action_values' style='margin-top:0;'>" +
+                   "    <label>DISPLAY_NAME</label>" +
+                   "    <span style='font-weight:bold'>" +
+                   "        <a class='action_inline_filter' data-facet_name='FACET_NAME' data-facet_value='FACET_VALUE'>" +
+                   "            FACET_VALUE" +
+                   "        </a>" +
+                   "    </span>" +
+                   "</li>";
+
+    var html = '';
+
+    for (var key in data) {
+        if ((key.substring(0, 'action_'.length) !== 'action_') && (key.substring(0, 'extensions_'.length) !== 'extensions_'))
+            continue;
+        var display_name = extract_facet_display_name(key);
+        if (key == display_name)
+            continue;
+
+        html += template.replace(/DISPLAY_NAME/g, display_name)
+            .replace(/FACET_NAME/g, key)
+            .replace(/FACET_VALUE/g, data[key]);
+    }
+
+    return html;
 }
 
 $(document).ready

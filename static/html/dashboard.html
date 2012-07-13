@@ -22,6 +22,7 @@
     <script type="text/javascript" src="/static/js/lib/jquery.em.js"></script>
     <script type="text/javascript" src="/static/js/lib/jquery.jscrollpane.js"></script>
     <script type="text/javascript" src="/static/js/lib/jquery.jqmodal.js"></script>
+    <script type="text/javascript" src="/static/js/lib/ajaxupload.js"></script>
     <script type="text/javascript" src="/static/js/thedashboard/header.js?ts={{ timestamp}}"></script>
     <script type="text/javascript" src="/static/js/thedashboard/header_dashboard_name.js?ts={{ timestamp}}"></script>
     <script type="text/javascript" src="/static/js/thedashboard/site.js?ts={{ timestamp}}"></script>
@@ -42,6 +43,7 @@
     <script type="text/javascript" src="/static/js/thedashboard/dashboard_visualization.js?ts={{ timestamp}}"></script>
     <script type="text/javascript" src="/static/js/thedashboard/on_exit_modal.js?ts={{ timestamp}}"></script>
     <script type="text/javascript" src="/static/js/thedashboard/modal_api_key_manager.js?ts={{ timestamp}}"></script>
+    <script type="text/javascript" src="/static/js/thedashboard/modal_data_uploader.js?ts={{ timestamp}}"></script>
     <script type="text/javascript">
         EMBEDDED_MODE = false;
         var html_host = '{{ static_host }}';
@@ -118,6 +120,7 @@
             </div>
             {% include 'thedashboard/modals/on_exit.html' %}
             {% include 'thedashboard/modals/api_key_manager.html' %}
+            {% include 'thedashboard/modals/data_uploader.html' %}
         </div>
     </div>
     {% include 'ga_tracking.html' %}
