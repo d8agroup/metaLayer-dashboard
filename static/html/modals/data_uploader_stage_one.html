@@ -1,0 +1,27 @@
+<div class="step ui-corner-all" id="step_one">
+    <div class="waiting hidden">
+        <p>Uploading file<img src="/static/images/thedashboard/loading_circle_on_555555.gif"/></p>
+    </div>
+    <div class="content">
+        <p class="instructions">Click the "Choose a file" button below to select the file containing your own data.</p>
+        <div class="upload_errors hidden">
+            <div class="ui-state-error ui-corner-all">
+                <p><span class="ui-icon ui-icon-info"></span><span class="message">Sorry we could not find an uploader for that file. See the hints below and try again.</span></p>
+            </div>
+        </div>
+        <div class="ui-state-highlight ui-corner-all info">
+            <p><span class="ui-icon ui-icon-info"></span>Files must be less than 100MB in size</p>
+        </div>
+        <div class="ui-state-highlight ui-corner-all info">
+            <p><span class="ui-icon ui-icon-info"></span>Files must be in CSV format</p>
+        </div>
+        <div class="ui-state-highlight ui-corner-all info">
+            <p><span class="ui-icon ui-icon-info"></span>First row must be column headers</p>
+        </div>
+        <hr />
+        <a class="button" id="data_uploader_file">
+            <img src="/static/images/thedashboard/data_points/upload_small.png" style="position:relative; top:3px; width:20px"/>
+            <span id="data_uploader_file_text" style="position:relative; bottom:3px;">Choose a file</span>
+        </a>
+    </div>
+</div>

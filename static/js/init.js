@@ -187,5 +187,9 @@ $(document).ready
         $.get('http://' + html_host + '/static/html/thedashboard/visualizations/unconfigured_visualization_container.html?time=' + time, function(t) { $.template('unconfigured_visualization_container', t)});
         $.get('http://' + html_host + '/static/html/thedashboard/visualizations/unconfigurable_visualization_container.html?time=' + time, function(t) { $.template('unconfigurable_visualization_container', t)});
         $.get('http://' + html_host + '/static/html/thedashboard/modals/api_key_line.html?time=' + time, function(t) { $.template('api_key_line', t)});
+        $.get('http://' + html_host + '/static/html/thedashboard/modals/data_uploader_stage_one.html?time=' + time, function(t) { $.template('data_uploader_stage_one', t)});
+        $.get('http://' + html_host + '/static/html/thedashboard/modals/data_uploader_stage_two.html?time=' + time, function(t) { $.template('data_uploader_stage_two', t)});
+        $.get('http://' + html_host + '/static/html/thedashboard/modals/data_uploader_stage_three.html?time=' + time, function(t) { $.template('data_uploader_stage_three', t)});
+        $.get('http://' + html_host + '/static/html/thedashboard/modals/data_uploader_single_uploader.html?time=' + time, function(t) { $.template('data_uploader_single_uploader', t)});
     }
 );

@@ -14,7 +14,6 @@
             var search_filters = data.search_filters;
             var base_search_configuration = data.base_search_configuration;
 
-
             for (var x=0; x<search_results.facet_groups.length; x++)
             {
                 var facet_group_name = search_results.facet_groups[x].name;

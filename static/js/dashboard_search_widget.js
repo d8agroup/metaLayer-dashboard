@@ -15,12 +15,12 @@
         {
             var dashboard_search_widget = this;
             var configuration = dashboard_search_widget.data('configuration');
-            //Calculate the base start and end time for this collection search based on the data points
-            if (configuration.base_search_configuration == null)
-                configuration.base_search_configuration = {};
+            if (configuration.base_search_configuration == null){
+                configuration.base_search_configuration = {};}
             var base_start_time = null;
-            for (var x=0; x<configuration.data_points.length; x++)
-                for (var y=0; y<configuration.data_points[x].elements.length; y++)
+            for (var x=0; x<configuration.data_points.length; x++){
+                for (var y=0; y<configuration.data_points[x].elements.length; y++){
+                    //Calculate the base start and end time for this collection search based on the data points
                     if (configuration.data_points[x].elements[y].name == 'start_time')
                     {
                         var new_value = configuration.data_points[x].elements[y].value;
@@ -30,6 +30,8 @@
                             if (new_value == '*' || (base_start_time != '*' && new_value < base_start_time))
                                     base_start_time = new_value;
                     }
+                }
+            }
             configuration.base_search_configuration.search_start_time = (base_start_time != null) ? base_start_time : ((new Date().valueOf() * 0.001)|0) - 7200;
             var base_end_time = null;
             for (var x=0; x<configuration.data_points.length; x++)

@@ -90,7 +90,7 @@
             );
         dashboard_unconfigured_data_point.find('.file_upload_link').click(function(){
             var data_point = $(this).parents('.data_point_config_container').data('data_point');
-            $('#data_uploader').modal_data_uploader({data_point:data_point});
+            $('#data_uploader').modal_data_uploader('open', {data_point:data_point});
         });
         return dashboard_unconfigured_data_point
     }
