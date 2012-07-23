@@ -259,7 +259,7 @@ ON EXIT MODAL
 .modal#data_uploader #steps .step#step_two .upload_errors .error_list { margin-top:10px;}
 .modal#data_uploader #steps .step#step_two .upload_errors .error_list .ui-state-error { margin-bottom:5px; }
 .modal#data_uploader #steps .step#step_two #uploader_list { }
-.modal#data_uploader #steps .step#step_two .uploader { background-color:#AAA; border:1px solid #CCC; color:#333; cursor:pointer; }
+.modal#data_uploader #steps .step#step_two .uploader { background-color:#AAA; border:1px solid #CCC; color:#333; cursor:pointer; margin-bottom:5px;}
 .modal#data_uploader #steps .step#step_two .uploader.hover { background-color:#CCC; border:1px solid #FFF; color:#333; }
 .modal#data_uploader #steps .step#step_two .uploader .inner { padding:5px; }
 .modal#data_uploader #steps .step#step_two .uploader .inner img { float:left; padding-right:10px; width:35px;}

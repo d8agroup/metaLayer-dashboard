@@ -87,6 +87,14 @@
                 onComplete:function(file, response){
                     var json_response = jQuery.parseJSON(response);
                     if (json_response.uploaders.length > 0){
+                        for (var x=0; x<json_response.uploaders.length; x++){
+                            var datauploader_name = json_response.uploaders[x].name;
+                            if ($.template[datauploader_name] == null)
+                                $.getJSON('/u/get_content_item_template/' + datauploader_name, function(data){
+                                    if (data.template != null)
+                                        $.template('dashboard_search_results_content_items_customdata_' + data.datauploader_name, data.template);
+                                });
+                        }
                         setTimeout(function(){
                             $('#data_uploader').modal_data_uploader('render_stage_two', json_response);
                         }, 500);
