@@ -26,12 +26,12 @@
                     for (var a=0; a<configuration.actions.length; a++)
                         if (configuration.actions[a].configured && configuration.actions[a].content_properties.added != null)
                             for (var cp=0; cp<configuration.actions[a].content_properties.added.length; cp++)
-                                if (visualization.data_dimensions[d].type == configuration.actions[a].content_properties.added[cp].type)
+                                if ($.inArray(configuration.actions[a].content_properties.added[cp].type, visualization.data_dimensions[d].type) > -1)
                                     supported_dimension_values++;
                     for (var b=0; b<configuration.data_points.length; b++)
                         if (configuration.data_points[b].configured && configuration.data_points[b].meta_data != null)
                             for (var ex=0; ex<configuration.data_points[b].meta_data.length; ex++)
-                                if (visualization.data_dimensions[d].type == configuration.data_points[b].meta_data[ex].type)
+                                if ($.inArray(configuration.data_points[b].meta_data[ex].type, visualization.data_dimensions[d].type) > -1)
                                     supported_dimension_values++;
                     if (supported_dimension_values == 0)
                         unconfigurable++;
@@ -59,7 +59,8 @@
                     {
                         var value = container.find('.' + visualization.data_dimensions[x].name).val();
                         var name = container.find('option[value="' + value + '"]').data('title');
-                        visualization.data_dimensions[x]['value'] = { value:value, name:name }
+                        var type = container.find('option[value="' + value + '"]').data('type');
+                        visualization.data_dimensions[x]['value'] = { value:value, name:name, type:type }
                     }
                 visualization.configured = true;
                 var collection = container.parents('.collection_container');
@@ -98,13 +99,14 @@
                 {
                     var dimension = visualization.data_dimensions[d];
                     dimension.values = [];
-                    var dimension_type = dimension.type;
-                    if (dimension_type == 'int')
-                        dimension.values[dimension.values.length] = { name:'Total Count', value:'total_count' };
+                    var dimension_types = dimension.type;
+//                    OLD Code supporting total count graphs - to be removed
+//                    if (dimension_type == 'int')
+//                        dimension.values[dimension.values.length] = { name:'Total Count', value:'total_count' };
                     for (var a=0; a<configuration.actions.length; a++)
                         if (configuration.actions[a].content_properties.added != null)
                             for (var cp=0; cp<configuration.actions[a].content_properties.added.length; cp++)
-                                if(configuration.actions[a].content_properties.added[cp].type == dimension_type)
+                                if($.inArray(configuration.actions[a].content_properties.added[cp].type, dimension_types) > -1)
                                     dimension.values[dimension.values.length] =
                                     {
                                         name:configuration.actions[a].content_properties.added[cp].display_name,
@@ -113,15 +115,17 @@
                                                 configuration.actions[a].name,
                                                 configuration.actions[a].content_properties.added[cp].name,
                                                 configuration.actions[a].content_properties.added[cp].type
-                                            )
+                                            ),
+                                        type:configuration.actions[a].content_properties.added[cp].type
                                     };
                     for (var b=0; b<configuration.data_points.length; b++)
                         if (configuration.data_points[b].configured && configuration.data_points[b].meta_data != null)
                             for (var ex=0; ex<configuration.data_points[b].meta_data.length; ex++)
-                                if (dimension_type == configuration.data_points[b].meta_data[ex].type)
+                                if ($.inArray(configuration.data_points[b].meta_data[ex].type, dimension_types) > -1)
                                     dimension.values[dimension.values.length] = {
                                         name:configuration.data_points[b].meta_data[ex].display_name,
-                                        value:configuration.data_points[b].meta_data[ex].name
+                                        value:configuration.data_points[b].meta_data[ex].name,
+                                        type:configuration.data_points[b].meta_data[ex].type
                                     };
 
                     var un_duped_dimension_values = []
