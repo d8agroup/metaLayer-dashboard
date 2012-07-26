@@ -254,6 +254,7 @@ ON EXIT MODAL
 .modal#data_uploader #steps .step { background-color:#555; padding:10px; height:280px; overflow:auto; border:1px solid black}
 .modal#data_uploader #steps .step .instructions { padding-bottom:10px;}
 .modal#data_uploader #steps .step .info { margin: 5px 0;}
+.modal#data_uploader #steps .step#step_one .upload_errors .ul li { margin:5px 0 0 45px; list-style-type:circle;}
 .modal#data_uploader #steps .step#step_one hr { margin-top:20px; }
 .modal#data_uploader #steps .step#step_two .upload_errors { padding:10px; background-color:#AAA; border:1px solid #555; margin-bottom:10px; color:#333; }
 .modal#data_uploader #steps .step#step_two .upload_errors .error_list { margin-top:10px;}

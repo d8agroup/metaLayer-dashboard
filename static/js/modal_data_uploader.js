@@ -86,9 +86,10 @@
                 },
                 onComplete:function(file, response){
                     var json_response = jQuery.parseJSON(response);
-                    if (json_response.uploaders.length > 0){
-                        for (var x=0; x<json_response.uploaders.length; x++){
-                            var datauploader_name = json_response.uploaders[x].name;
+                    var available_uploaders = $.grep(json_response.uploaders, function(n, i){ return n.available; });
+                    if (available_uploaders.length > 0){
+                        for (var x=0; x<available_uploaders.length; x++){
+                            var datauploader_name = available_uploaders[x].name;
                             if ($.template[datauploader_name] == null)
                                 $.getJSON('/u/get_content_item_template/' + datauploader_name, function(data){
                                     if (data.template != null)
@@ -96,12 +97,13 @@
                                 });
                         }
                         setTimeout(function(){
-                            $('#data_uploader').modal_data_uploader('render_stage_two', json_response);
+                            $('#data_uploader').modal_data_uploader('render_stage_two', { uploaders:available_uploaders });
                         }, 500);
                     }
                     else {
+                        var unavailable_uploaders = $.grep(json_response.uploaders, function(n, i) { return !n.available; });
                         setTimeout(function(){
-                            $('#data_uploader #steps').modal_data_uploader_stage_one('render_errors');
+                            $('#data_uploader #steps').modal_data_uploader_stage_one('render_errors', unavailable_uploaders);
                         }, 500);
                     }
                 }
@@ -114,11 +116,21 @@
             container.find('.waiting').show();
             return container;
         },
-        render_errors:function(){
+        render_errors:function(unavailable_uploaders){
             var container = this;
             if (container.find('.waiting').is(':visible')) {
                 container.find('.waiting').hide();
                 container.find('.content').show();
+            }
+            var dynamic_errors_ul = container.find('.upload_errors .ul');
+            dynamic_errors_ul.children().remove();
+            if (unavailable_uploaders.length > 0){
+                for (var x=0; x<unavailable_uploaders.length; x++)
+                    if (unavailable_uploaders[x].detail_level < 0.5) //only show errors from broad or very-broad uploaders
+                        for (var y=0; y<unavailable_uploaders[x].errors.length; y++)
+                            dynamic_errors_ul.append('<li>' + unavailable_uploaders[x].errors[y] + '</li>')
+                if (dynamic_errors_ul.children().length > 0)
+                    container.find('.extra').show();
             }
             container.find('.upload_errors').show();
             return container;
