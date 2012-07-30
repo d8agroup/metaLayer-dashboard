@@ -5,7 +5,7 @@
             <ul>
                 {{each(index, filter) active_search_filters}}
                     <li>
-                        <span class="filter_name">${filter.display_name}:</span><span class="filter_value">{{html truncate_characters(filter.value, 60)}}</span>
+                        <span class="filter_name">${filter.display_name}:</span><span class="filter_value">{{html truncate_characters_with_mouseover(filter.value, 60)}}</span>
                     </li>
                 {{/each}}
             </ul>
@@ -52,7 +52,7 @@
                         {{/if}}
                         <li class="{{if facet.count == 0}}zero{{/if}} {{if index >= 10}}more{{/if}}">
                             <a class="simple_facet_link" data-facet_value="${facet.name}">
-                                ${truncate_characters(facet.name, 60)} (<span class="count">${facet.count}</span>)
+                                {{html truncate_characters_with_mouseover(facet.name, 60)}} (<span class="count">${facet.count}</span>)
                             </a>
                         </li>
                         {{if index > 10 && index == facet_group.facets.length - 1}}

@@ -34,15 +34,24 @@
             {
                 var search_results_content_items_html = $('<ul class="content_items"></ul>');
                 search_results_container.append(search_results_content_items_html.dashboard_search_results_content_items({search_results:search_results, search_actions:search_actions}));
-                search_results_container.find('.action_inline_filter').click(function(event){
-                    event.preventDefault();
-                    var link = $(this);
-                    var data = {
-                        filter_name: link.data('facet_name'),
-                        filter_value: link.data('facet_value')
-                    };
-                    link.parents('.collection_container').dashboard_collection('apply_search_filter', data);
-                });
+                search_results_container.find('.action_inline_filter')
+                    .click(function(event){
+                        event.preventDefault();
+                        var link = $(this);
+                        var data = {
+                            filter_name: link.data('facet_name'),
+                            filter_value: link.data('facet_value')
+                        };
+                        link.parents('.collection_container').dashboard_collection('apply_search_filter', data);
+                    })
+                    .mouseenter(function(){
+                        $(this).find('.more_indicator').hide();
+                        $(this).find('span.more').show();
+                    })
+                    .mouseleave(function(){
+                        $(this).find('.more_indicator').show();
+                        $(this).find('span.more').hide();
+                    });
                 search_results_container.find('.action_inline_range_filter').click(function(event){
                     event.preventDefault();
                     $(this).parents('.collection_container').find('.explore_data').click();

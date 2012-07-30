@@ -125,14 +125,16 @@ function display_text_abstract(text) {
     return all_text.substring(0, 200) + ' ...'
 }
 
-function truncate_characters(text, limit) {
+function truncate_characters_with_mouseover(text, limit) {
     if (text.length <= limit)
         return text;
 
     if (limit < 4)
         limit = 4;
 
-    return text.substring(0, limit - 4) + " ...";
+    var first_part = text.substring(0, limit - 4) + '<span class="more_indicator"> ...</span>';
+    var second_part = '<span class="more hidden">' + text.substring(limit - 4, text.length) + '</span>';
+    return first_part + second_part;
 }
 
 function extract_facet_display_name(facet_name) {
@@ -167,7 +169,7 @@ function render_dynamic_content_item_actions_and_extensions(data) {
         var value_as_string = '';
         for (var x=0; x<value.length; x++)
             value_as_string += value[x];
-        value_as_string = truncate_characters(value_as_string, 70);
+        value_as_string = truncate_characters_with_mouseover(value_as_string, 70);
         html += template.replace(/DISPLAY_NAME/g, display_name)
             .replace(/FACET_NAME/g, key)
             .replace(/FACET_VALUE/g, value_as_string);

@@ -166,6 +166,17 @@
                 })
             }
 
+            search_filters_container.find('.simple_facet_link')
+                .mouseenter(function(){
+                    $(this).find('.more_indicator').hide();
+                    $(this).find('span.more').show();
+                })
+                .mouseleave(function(){
+                    $(this).find('.more_indicator').show();
+                    $(this).find('span.more').hide();
+                });
+
+
             search_filters_container.find('.daterange .range').html(display_time2(search_filter_start_time) + ' to ' + ((search_filter_end_time == base_search_end_time) ? 'Now' : display_time2(search_filter_end_time)));
             search_filters_container.find('.daterange .slider').slider({
                 range:true,
