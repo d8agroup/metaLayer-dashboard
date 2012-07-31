@@ -76,6 +76,10 @@ function clean_user_generated_html(element)
     )
 }
 
+function strip_html(text) {
+    return text != null ? text.replace(/<(?:.|\n)*?>/gm, '') : '';
+}
+
 function search_encode_property(action_name, property_name, property_type)
 {
     var encoded_property = 'action_' + action_name + '_' + property_name;
@@ -118,22 +122,27 @@ function track_event(category, action, label)
 
 function display_text_abstract(text) {
     if (text == null)
-        return ''
+        return '';
     var all_text = '';
     for (var x=0; x<text.length; x++)
         all_text += text[x];
-    return all_text.substring(0, 200) + ' ...'
+    all_text = strip_html(all_text);
+    return all_text.substring(0, 200) + ' ...';
 }
 
 function truncate_characters_with_mouseover(text, limit) {
-    if (text.length <= limit)
-        return text;
+    var text_as_string = '';
+    for (var x=0; x<text.length; x++)
+        text_as_string += text[x];
+
+    if (text_as_string.length <= limit)
+        return text_as_string;
 
     if (limit < 4)
         limit = 4;
 
-    var first_part = text.substring(0, limit - 4) + '<span class="more_indicator"> ...</span>';
-    var second_part = '<span class="more hidden">' + text.substring(limit - 4, text.length) + '</span>';
+    var first_part = text_as_string.substring(0, limit - 4) + '<span class="more_indicator"> ...</span>';
+    var second_part = '<span class="more hidden">' + text_as_string.substring(limit - 4, text_as_string.length) + '</span>';
     return first_part + second_part;
 }
 
