@@ -183,6 +183,7 @@ $(document).ready
     function()
     {
         /* Waiting Large Area*****************************************************************/
+
         $.template
         (
             'waiting_large',
@@ -191,6 +192,10 @@ $(document).ready
             "</div>"
         );
         var time = parseInt(new Date().getTime() * 0.001);
+        $.getJSON('/u/get_all_templates_with_options?time=' + time, function(uploaders){
+            for(var x=0; x<uploaders.length; x++)
+                $.template('dashboard_search_results_content_items_customdata_' + uploaders[x].name, uploaders[x].template);
+        });
         $.get('http://' + html_host + '/static/html/thedashboard/search_widget/dashboard_search_widget_search_filters.html?time=' + time, function(t) { $.template('dashboard_search_widget_search_filters', t)});
         $.get('http://' + html_host + '/static/html/thedashboard/search_widget/dashboard_search_widget_options_panel.html?time=' + time, function(t) { $.template('dashboard_search_widget_options_panel', t)});
         $.get('http://' + html_host + '/static/html/thedashboard/search_widget/dashboard_search_widget_data_point.html?time=' + time, function(t) { $.template('dashboard_search_widget_data_point', t)});

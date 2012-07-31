@@ -88,14 +88,6 @@
                     var json_response = jQuery.parseJSON(response);
                     var available_uploaders = $.grep(json_response.uploaders, function(n, i){ return n.available; });
                     if (available_uploaders.length > 0){
-                        for (var x=0; x<available_uploaders.length; x++){
-                            var datauploader_name = available_uploaders[x].name;
-                            if ($.template[datauploader_name] == null)
-                                $.getJSON('/u/get_content_item_template/' + datauploader_name, function(data){
-                                    if (data.template != null)
-                                        $.template('dashboard_search_results_content_items_customdata_' + data.datauploader_name, data.template);
-                                });
-                        }
                         setTimeout(function(){
                             $('#data_uploader').modal_data_uploader('render_stage_two', { uploaders:available_uploaders });
                         }, 500);
