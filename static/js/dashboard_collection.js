@@ -5,8 +5,7 @@
 {
     var methods =
     {
-        init:function(data)
-        {
+        init:function(data){
             var dashboard_collection = this;
             var collection = data.collection;
             if (collection.options == null)
@@ -28,8 +27,7 @@
             dashboard_collection.data('configuration', collection);
             return dashboard_collection;
         },
-        render:function()
-        {
+        render:function(){
             var dashboard_collection = this;
             var configuration = dashboard_collection.data('configuration');
             if (configuration.data_points.length == 0)
@@ -58,8 +56,7 @@
             dashboard_collection.parents('.dashboard').dashboard('save');
             return dashboard_collection;
         },
-        remove:function()
-        {
+        remove:function(){
             var dashboard_collection = this;
             var configuration = dashboard_collection.data('configuration');
             configuration.options = {};
@@ -76,8 +73,7 @@
             track_event('collection', 'removed', null);
             return dashboard_collection;
         },
-        apply_widget_droppable:function()
-        {
+        apply_widget_droppable:function(){
             var data_point_dropped_function = function(event, ui, configuration, collection)
             {
                 var draggable = ui.draggable;
@@ -96,41 +92,38 @@
 
             var dropped_function = function(event, ui, configuration, collection)
             {
-                var action_dropped_function = function(event, ui, configuration, collection)
-                {
+                var action_dropped_function = function(event, ui, configuration, collection) {
                     var draggable = ui.draggable;
                     var action = clone(draggable.data('action'));
                     action['id'] = guid();
                     if (configuration.actions == null)
                         configuration.actions = [];
                     configuration.actions[configuration.actions.length] = action;
-                    if (action.elements.length == 1 && action.elements[0].type == 'api_key')
-                    {
+                    if (action.elements.length == 1 && action.elements[0].type == 'api_key') {
                         var api_key = access_api_key_store_value(action.name);
-                        if (api_key > '')
-                        {
+                        if (api_key > '') {
                             action.elements[0].value = api_key;
                             action.configured = true;
                         }
                     }
-                    if (action.configured)
-                    {
-                        $.post
-                            (
-                                '/dashboard/actions/add_action_to_data_points',
-                                {
-                                    action:JSON.stringify(action),
-                                    data_points:JSON.stringify(configuration.data_points),
-                                    csrfmiddlewaretoken:$('#csrf_form input').val()
-                                },
-                                function() {
-                                    collection.dashboard_collection('render');
-                                }
-                            );
+                    if (action.configured) {
+                        configuration.waiting_for_action_to_be_applied = true;
+                        $.post('/dashboard/actions/add_action_to_data_points',
+                            {
+                                action:JSON.stringify(action),
+                                data_points:JSON.stringify(configuration.data_points),
+                                csrfmiddlewaretoken:$('#csrf_form input').val()
+                            },
+                            function() {
+                                var configuration = collection.data('configuration');
+                                configuration.waiting_for_action_to_be_applied = false;
+                                collection.dashboard_collection('render');
+                            }
+                        );
                     }
-
                     collection.data('configuration', configuration);
                     collection.dashboard_collection('render');
+
                     track_event('action', 'added', action.name);
                 };
 
@@ -209,24 +202,19 @@
 
             var collection = this;
             var configuration = collection.data('configuration');
-            collection.find('.search_widget').droppable
-                (
-                    {
-                        accept:'.output_widget, .action_widget, .data_point_widget, .visualization_widget',
-                        drop:function(event, ui) { dropped_function(event, ui, configuration, collection); }
-                    }
-                );
-            collection.find('.empty_collection').droppable
-                (
-                    {
-                        accept:'.data_point_widget',
-                        drop:function(event, ui) { data_point_dropped_function(event, ui, configuration, collection); }
-                    }
-                );
+            collection.find('.search_widget').droppable({
+                accept:'.output_widget, .action_widget, .data_point_widget, .visualization_widget',
+                drop:function(event, ui) {
+                    dropped_function(event, ui, configuration, collection);
+                }
+            });
+            collection.find('.empty_collection').droppable({
+                accept:'.data_point_widget',
+                drop:function(event, ui) { data_point_dropped_function(event, ui, configuration, collection); }
+            });
             return this;
         },
-        apply_dashboard_collection_droppable:function()
-        {
+        apply_dashboard_collection_droppable:function(){
             var collection_dropped_function = function(event, ui, collection, configuration)
             {
                 var dragged_collection = ui.draggable;
@@ -250,8 +238,7 @@
                     }
                 );
         },
-        remove_output:function(output_id)
-        {
+        remove_output:function(output_id){
             var collection = this;
             var configuration = collection.data('configuration');
             var new_outputs = [];
@@ -269,8 +256,7 @@
 
             return collection;
         },
-        remove_visualization:function(visualization_id)
-        {
+        remove_visualization:function(visualization_id){
             var collection = this;
             var configuration = collection.data('configuration');
             var new_visualizations = [];
@@ -288,13 +274,18 @@
             collection.parents('.dashboard').dashboard('save');
             return collection;
         },
-        search_results_updated:function()
-        {
+        search_results_updated:function(){
             var collection = this;
             var configuration = collection.data('configuration');
             collection.find('.visualizations_container').dashboard_visualizations('capture_snapshots');
             collection.find('.visualizations_container').dashboard_visualizations('update');
             collection.find('.outputs_container').dashboard_outputs(configuration);
+        },
+        apply_waiting:function(data){
+            this.find('.options_container .refresh_data img').attr(
+                'src',
+                '/static/images/thedashboard/icon_clock_loading.gif'
+            ).addClass('loading');
         },
         apply_search_filter:function(data) {
             var container = this;
@@ -310,6 +301,7 @@
             };
             dashboard_collection.dashboard_collection('render');
         }
+
     };
 
     $.fn.dashboard_collection = function( method )

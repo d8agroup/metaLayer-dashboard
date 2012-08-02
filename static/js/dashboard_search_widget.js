@@ -84,8 +84,13 @@
             var search_results_html = $("<div class='search_results_container'></div>");
             dashboard_search_widget.append(search_results_html);
 
-            dashboard_search_widget.dashboard_search_widget('run_search');
-            dashboard_search_widget.parents('.dashboard').dashboard('save');
+            if (configuration.waiting_for_action_to_be_applied)
+                dashboard_search_widget.dashboard_search_widget('apply_waiting');
+            else
+                dashboard_search_widget.dashboard_search_widget('run_search');
+
+            //Removed additional save, remove completely on next iteation: MG 20120802
+            //dashboard_search_widget.parents('.dashboard').dashboard('save');
             return dashboard_search_widget;
         },
         run_search:function(data)
@@ -134,7 +139,7 @@
                     search_widget.find('.search_results_container').dashboard_search_results({search_results:search_results, search_filters:search_filters, actions:actions});
                     search_widget.find('.search_filters').dashboard_search_widget_search_filters({search_results:search_results, search_filters:search_filters, base_search_configuration:base_search_configuration});
                     search_widget.find('.search_results_container').jScrollPane( { topCapHeight:40, bottomCapHeight:40 } );
-                    search_widget.find('.options_container .refresh_data img').attr('src', '/static/images/thedashboard/icon_clock.png' ) .removeClass('loading');
+                    search_widget.dashboard_search_widget('remove_waiting');
                     search_widget.parents('.collection_container').dashboard_collection('search_results_updated');
                     setTimeout(function() { run_search_at_interval_function(search_widget) }, 30000);
                 };
@@ -160,13 +165,8 @@
                 setTimeout(function() { dashboard_search_widget.dashboard_search_widget('run_search') }, 30000);
                 return;
             }
-            dashboard_search_widget.find('.options_container .refresh_data img').attr
-                (
-                    'src',
-                    '/static/images/thedashboard/icon_clock_loading.gif'
-                )
-                .addClass('loading');
 
+            dashboard_search_widget.dashboard_search_widget('apply_waiting');
             setTimeout(function() {really_run_search_function(dashboard_search_widget)}, 1000);
             return dashboard_search_widget;
         },
@@ -203,6 +203,22 @@
             var container = this;
             container.find('.search_filters').dashboard_search_widget_search_filters('apply_search_filter', data);
             return container;
+        },
+        apply_waiting:function(){
+            var dashboard_search_widget = this;
+            dashboard_search_widget.find('.options_container .refresh_data img').attr(
+                'src',
+                '/static/images/thedashboard/icon_clock_loading.gif'
+            ).addClass('loading');
+            return dashboard_search_widget;
+        },
+        remove_waiting:function(){
+            var dashboard_search_widget = this;
+            dashboard_search_widget.find('.options_container .refresh_data img').attr(
+                'src',
+                '/static/images/thedashboard/icon_clock.png'
+            ).removeClass('loading');
+            return dashboard_search_widget;
         }
     };
 
