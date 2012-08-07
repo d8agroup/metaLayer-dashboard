@@ -9,6 +9,21 @@
     <form>
         <div class='configuration' data-name='${type}'>
             {{each(index, element) elements}}
+                {{if element.type == 'oauth2'}}
+                    <input type="hidden" name="${element.name}" value="${element.value}" class="oauth2" />
+                    <a href="/dashboard/data_points/oauth2/authenticate?data_point_type=${$data.type}&id=${id}" target="_blank" class="hidden" id="oauth2_authenticate_${id}">authenticate</a>
+                {{/if}}
+                {{if element.type == 'select'}}
+                    <div class='form_row'>
+                        <label>${element.display_name}</label>
+                        <select name="${element.name}" class="${element.name}">
+                            {{each(index, option) element.values}}
+                                <option value="${option.value}">${option.name}</option>
+                            {{/each}}
+                        </select>
+                        <p class="help">{{html element.help}}</p>
+                    </div>
+                {{/if}}
                 {{if element.type == 'text'}}
                     <div class='form_row'>
                         <label>${element.display_name}</label>
