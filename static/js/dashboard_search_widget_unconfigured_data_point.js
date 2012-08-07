@@ -88,6 +88,29 @@
                     $('#api_key_manager').modal_api_key_manager();
                 }
             );
+
+        var oauth2_input = dashboard_unconfigured_data_point.find('.oauth2');
+        if (oauth2_input.length > 0) {
+            oauth2_input = $(oauth2_input[0]);
+            if (oauth2_input.val() == ''){
+                $.post('/dashboard/data_points/oauth2/authenticate',
+                    { data_point:JSON.stringify(data_point), csrfmiddlewaretoken:$('#csrf_form input').val() },
+                    function(enhanced_data_point) {
+                        var id = enhanced_data_point.id;
+                        $('.collection_container').each(function(){
+                            var configuration = $(this).data('configuration');
+                            for(var x=0; x<configuration.data_points.length; x++)
+                                if (configuration.data_points[x].id == id) {
+                                    configuration.data_points[x] = enhanced_data_point;
+                                    $(this).dashboard_collection('render');
+                                }
+                        });
+                    },
+                    'JSON'
+                );
+            }
+        }
+
         dashboard_unconfigured_data_point.find('.file_upload_link').click(function(){
             var data_point = $(this).parents('.data_point_config_container').data('data_point');
             $('#data_uploader').modal_data_uploader('open', {data_point:data_point});

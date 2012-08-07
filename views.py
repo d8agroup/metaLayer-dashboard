@@ -138,6 +138,16 @@ def dashboard_validate_data_point(request):
     return JSONResponse({'passed':passed, 'errors':errors, 'configured_display_name':configured_display_name})
 
 @login_required(login_url='/')
+def dashboard_oauth_authenticate_and_configure_data_point(request):
+    data_point = request.POST['data_point']
+    data_point = json.loads(data_point)
+    dpc = DataPointController(data_point)
+    credentials = dpc.oauth_authenticate_for_data_point()
+    data_point = dpc.update_data_point_with_oauth_dependant_config(credentials)
+    return JSONResponse(data_point)
+
+
+@login_required(login_url='/')
 def dashboard_remove_data_point(request):
     Logger.Info('%s - dashboard_remove_data_point - started' % __name__)
     data_point = request.POST['data_point']
