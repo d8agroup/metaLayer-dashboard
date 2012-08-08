@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.shortcuts import render_to_response, redirect
 from django.template.loader import render_to_string
 from django.views.decorators.cache import never_cache
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.utils import simplejson as json
@@ -137,15 +137,37 @@ def dashboard_validate_data_point(request):
     configured_display_name = dpc.get_configured_display_name()
     return JSONResponse({'passed':passed, 'errors':errors, 'configured_display_name':configured_display_name})
 
-@login_required(login_url='/')
-def dashboard_oauth_authenticate_and_configure_data_point(request):
+def dashboard_data_point_oauth_credentials_are_valid(request):
+    credentials_json = request.POST.get('credentials')
     data_point = request.POST['data_point']
     data_point = json.loads(data_point)
     dpc = DataPointController(data_point)
-    credentials = dpc.oauth_authenticate_for_data_point()
-    data_point = dpc.update_data_point_with_oauth_dependant_config(credentials)
-    return JSONResponse(data_point)
+    credentials_are_valid = dpc.oauth_credentials_are_valid(credentials_json)
+    return_data = {
+        'credentials_are_valid': credentials_are_valid,
+        'data_point_id': data_point['id'],
+        'data_point_type':data_point['type']}
+    if credentials_are_valid:
+        data_point = dpc.update_data_point_with_oauth_dependant_config()
+        return_data['data_point'] = data_point
+    return JSONResponse(return_data)
 
+
+def dashboard_data_point_oauth_poll_for_new_credentials(request):
+    data_point = request.POST['data_point']
+    data_point = json.loads(data_point)
+    dpc = DataPointController(data_point)
+    data_point_with_credentials = dpc.oauth_poll_for_new_credentials()
+    dpc = DataPointController(data_point_with_credentials)
+    enhanced_data_point = dpc.update_data_point_with_oauth_dependant_config()
+    return JSONResponse({'data_point':enhanced_data_point})
+
+def dashboard_oauth_authenticate(request):
+    data_point_type = request.GET.get('data_point_type')
+    data_point_id = request.GET.get('id')
+    dpc = DataPointController({'type':data_point_type, 'id':data_point_id})
+    redirect_url = dpc.get_oauth_authenticate_url()
+    return HttpResponseRedirect(redirect_url)
 
 @login_required(login_url='/')
 def dashboard_remove_data_point(request):

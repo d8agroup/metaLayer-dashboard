@@ -11,6 +11,7 @@
             {{each(index, element) elements}}
                 {{if element.type == 'oauth2'}}
                     <input type="hidden" name="${element.name}" value="${element.value}" class="oauth2" />
+                    <a href="/dashboard/data_points/oauth2/authenticate?data_point_type=${$data.type}&id=${id}" target="_blank" class="hidden" id="oauth2_authenticate_${id}">authenticate</a>
                 {{/if}}
                 {{if element.type == 'select'}}
                     <div class='form_row'>
