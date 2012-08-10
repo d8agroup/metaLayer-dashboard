@@ -194,9 +194,9 @@
             var stats_keys = Object.keys(search_results.stats);
             for (var x=0; x<stats_keys.length; x++) {
                 var facet_range_group_name = stats_keys[x];
-                if (search_results.stats[range_facet_group_name] == null)
-                    continue;
                 var range_facet_group = search_results.stats[facet_range_group_name];
+                if (range_facet_group == null)
+                    continue;
                 var base_facet_group = base_search_configuration.facet_range_groups[facet_range_group_name];
                 search_filters_container.find('.action_range_filter.' + facet_range_group_name + ' .range').html(range_facet_group.min + " to " + range_facet_group.max)
                 search_filters_container.find('.action_range_filter.' + facet_range_group_name + ' .action_range_slider').slider({
