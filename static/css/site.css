@@ -84,6 +84,10 @@ DASHBOARD
 .data_point_config .form_actions input { width:48%; padding:5px; }
 .data_point_config .waiting { padding:0; }
 .data_point_config .waiting p { padding-top:25%; color:#FFF;}
+.data_point_config .oauth_authenticate .instructions { width:90%; margin:10px auto;}
+.data_point_config .oauth_authenticate .form_row { margin-top:5px; }
+.data_point_config .oauth_authenticate .form_row label { width:70%; }
+
 
 
 .action_config { height:301px; }

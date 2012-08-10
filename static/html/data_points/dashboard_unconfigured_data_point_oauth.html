@@ -1,0 +1,19 @@
+<div class='data_point_config' data-data_point_id='${data_point.id}'>
+    <div class='image_and_title'>
+        <img src='${data_point.image_small}' />
+        <h3>${data_point.full_display_name}</h3>
+    </div>
+    <div class="oauth_authenticate">
+        <p class="instructions">
+            {{each(index, element) data_point.elements}}
+                {{if element.name == 'oauth2'}}
+                    {{html element.help}}
+                {{/if}}
+            {{/each}}
+        </p>
+        <div class="form_row">
+            <label>Accessing this data needs your authorization.</label>
+            <a class="button" href="${authorization_url}" target="_blank">Authorize</a>
+        </div>
+    </div>
+</div>

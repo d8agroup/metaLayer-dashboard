@@ -18,50 +18,40 @@
                 return dashboard_unconfigured_data_point.dashboard_unconfigured_data_point('render');
             }
             else {
+                //update the oauth2 credentials store
+                var data_point_type = data_point.type;
+                var oauth2_credentials_store = $('#oauth2_credentials_store').data('store');
+                if (oauth2_credentials_store == null || oauth2_credentials_store == '')
+                    oauth2_credentials_store = { data_points: {} };
+                if (oauth2_credentials_store.data_points[data_point_type] == null)
+                    oauth2_credentials_store.data_points[data_point_type] = oauth2_credentials;
+                else
+                    for (var x=0; x<data_point.elements.length; x++)
+                        if (data_point.elements[x].name == 'oauth2')
+                            data_point.elements[x].value = oauth2_credentials_store.data_points[data_point_type]
+
+                $('#oauth2_credentials_store').data('store', oauth2_credentials_store);
+
                 dashboard_unconfigured_data_point.dashboard_unconfigured_data_point('render_waiting');
                 $.post('/dashboard/data_points/oauth2/check_credentials',
-                    { data_point:JSON.stringify(data_point), credentials:oauth2_credentials, csrfmiddlewaretoken:$('#csrf_form input').val() },
+                    {
+                        data_point:JSON.stringify(data_point),
+                        credentials:oauth2_credentials_store.data_points[data_point_type],
+                        csrfmiddlewaretoken:$('#csrf_form input').val()
+                    },
                     function(data){
                         var is_valid = data.credentials_are_valid;
                         var data_point_id = data.data_point_id;
                         var data_point_type = data.data_point_type;
                         if (!is_valid){
-                            window.open('/dashboard/data_points/oauth2/authenticate?data_point_type=' + data_point_type + '&id=' + data_point_id);
-                            setTimeout(function(){
-                                $.post('/dashboard/data_points/oauth2/poll_for_new_credentials',
-                                    { data_point:JSON.stringify(data_point), csrfmiddlewaretoken:$('#csrf_form input').val() },
-                                    function(data){
-                                        var enhanced_data_point = data.data_point;
-                                        dashboard_unconfigured_data_point.data('data_point', enhanced_data_point);
-                                        dashboard_unconfigured_data_point.dashboard_unconfigured_data_point('render');
-//                                        var id = enhanced_data_point.id;
-//                                        $('.collection_container').each(function(){
-//                                            var configuration = $(this).data('configuration');
-//                                            for(var x=0; x<configuration.data_points.length; x++)
-//                                                if (configuration.data_points[x].id == id) {
-//                                                    configuration.data_points[x] = enhanced_data_point;
-//                                                    dashboard_unconfigured_data_point.dashboard_unconfigured_data_point('render');
-//                                                }
-//                                        });
-                                    }
-                                )
-                            }, 1500);
+                            //window.open('/dashboard/data_points/oauth2/authenticate?data_point_type=' + data_point_type + '&id=' + data_point_id);
+                            var authorization_url = '/dashboard/data_points/oauth2/authenticate?data_point_type=' + data_point_type + '&id=' + data_point_id;
+                            dashboard_unconfigured_data_point.dashboard_unconfigured_data_point('render_oauth_authenticate', authorization_url);
                         }
                         else {
                             var enhanced_data_point = data.data_point;
                             dashboard_unconfigured_data_point.data('data_point', enhanced_data_point);
                             dashboard_unconfigured_data_point.dashboard_unconfigured_data_point('render');
-//                            if (enhanced_data_point != null){
-//                                var id = enhanced_data_point.id;
-//                                $('.collection_container').each(function(){
-//                                    var configuration = $(this).data('configuration');
-//                                    for(var x=0; x<configuration.data_points.length; x++)
-//                                        if (configuration.data_points[x].id == id) {
-//                                            configuration.data_points[x] = enhanced_data_point;
-//                                            dashboard_unconfigured_data_point.dashboard_unconfigured_data_point('render');
-//                                        }
-//                                });
-//                            }
                         }
                     },
                     'JSON'
@@ -101,12 +91,12 @@
                     }
                     else
                     {
-                        container.find('.instructions').before
-                            (
-                                "<div class='alert errors'>" +
-                                    "<p>Sorry, we couldn't save this data point, please review the errors below</p>" +
-                                    "</div>"
-                            );
+//                        container.find('.instructions').before
+//                            (
+//                                "<div class='alert errors'>" +
+//                                    "<p>Sorry, we couldn't save this data point, please review the errors below</p>" +
+//                                    "</div>"
+//                            );
                         for (var error_group in data.errors)
                         {
                             var error_html = $("<div class='errors alert'></div>");
@@ -171,6 +161,35 @@
             var data_point = dashboard_unconfigured_data_point.data('data_point');
             var unconfigured_data_point_html = $.tmpl('dashboard_unconfigured_data_point_waiting', data_point);
             dashboard_unconfigured_data_point.html(unconfigured_data_point_html);
+            return this;
+        },
+        render_oauth_authenticate:function(authorization_url){
+            var dashboard_unconfigured_data_point = this;
+            var data_point = dashboard_unconfigured_data_point.data('data_point');
+            var unconfigured_data_point_html = $.tmpl('dashboard_unconfigured_data_point_oauth', {data_point:data_point, authorization_url:authorization_url});
+            dashboard_unconfigured_data_point.html(unconfigured_data_point_html);
+            dashboard_unconfigured_data_point.find('.button').button().click(function(){
+                dashboard_unconfigured_data_point.dashboard_unconfigured_data_point('render_waiting');
+                setTimeout(function(){
+                    $.post('/dashboard/data_points/oauth2/poll_for_new_credentials',
+                        { data_point:JSON.stringify(data_point), csrfmiddlewaretoken:$('#csrf_form input').val() },
+                        function(data){
+                            var enhanced_data_point = data.data_point;
+
+                            //store the correct credentials in the store
+                            var oauth2_credentials = null;
+                            for (var x=0; x<enhanced_data_point.elements.length; x++)
+                                if (enhanced_data_point.elements[x].name == 'oauth2')
+                                    oauth2_credentials = enhanced_data_point.elements[x].value;
+                            $('#oauth2_credentials_store').data('store').data_points[enhanced_data_point.type] = oauth2_credentials;
+
+                            dashboard_unconfigured_data_point.data('data_point', enhanced_data_point);
+                            dashboard_unconfigured_data_point.dashboard_unconfigured_data_point('render');
+                        }
+                    )
+                }, 1500);
+            });
+
             return this;
         }
     };
