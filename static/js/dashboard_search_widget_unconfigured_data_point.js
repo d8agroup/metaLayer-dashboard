@@ -76,6 +76,10 @@
                         remove_waiting(container);
                         data_point['configured'] = true;
                         data_point['configured_display_name'] = data.configured_display_name;
+                        var data_points = container.parents('.search_widget').data('configuration').data_points;
+                        for (var x=0; x<data_points.length; x++)
+                            if (data_points[x].id == data_point.id)
+                                data_points[x] = data_point;
                         var actions = container.parents('.collection_container').data('configuration').actions;
                         $.post
                             (
@@ -87,16 +91,9 @@
                                 }
                             );
                         container.parents('.search_widget').dashboard_search_widget('render');
-
                     }
                     else
                     {
-//                        container.find('.instructions').before
-//                            (
-//                                "<div class='alert errors'>" +
-//                                    "<p>Sorry, we couldn't save this data point, please review the errors below</p>" +
-//                                    "</div>"
-//                            );
                         for (var error_group in data.errors)
                         {
                             var error_html = $("<div class='errors alert'></div>");
