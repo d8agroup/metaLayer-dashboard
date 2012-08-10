@@ -11,17 +11,30 @@
             {{each(index, element) elements}}
                 {{if element.type == 'oauth2'}}
                     <input type="hidden" name="${element.name}" value="${element.value}" class="oauth2" />
-                    <a href="/dashboard/data_points/oauth2/authenticate?data_point_type=${$data.type}&id=${id}" target="_blank" class="hidden" id="oauth2_authenticate_${id}">authenticate</a>
                 {{/if}}
                 {{if element.type == 'select'}}
-                    <div class='form_row'>
+                    <div class='form_row clearfix'>
                         <label>${element.display_name}</label>
-                        <select name="${element.name}" class="${element.name}">
-                            {{each(index, option) element.values}}
-                                <option value="${option.value}">${option.name}</option>
-                            {{/each}}
-                        </select>
+                        <div class="select_container">
+                            <select name="${element.name}" class="${element.name}">
+                                {{each(index, option) element.values}}
+                                    <option value="${option.value}">${option.name}</option>
+                                {{/each}}
+                            </select>
+                        </div>
                         <p class="help">{{html element.help}}</p>
+                    </div>
+                {{/if}}
+                {{if element.type == 'multiple_select'}}
+                    <div class="form_row clearfix">
+                        <label>${element.display_name}</label>
+                        <div class="select_container">
+                            <select name='${element.name}' class="${element.name} multiple_select" multiple="multiple">
+                                {{each(index, option) element.values}}
+                                    <option value="${option.value}">${option.name}</option>
+                                {{/each}}
+                            </select>
+                        </div>
                     </div>
                 {{/if}}
                 {{if element.type == 'text'}}
@@ -44,6 +57,12 @@
                         <label>${element.display_name}</label>
                         <a class="file_upload_link">Upload</a>
                         <p class="help">${element.help}</p>
+                    </div>
+                {{/if}}
+                {{if element.type == 'date_time'}}
+                    <div class="form_row">
+                        <label>${element.display_name}</label>
+                        <input type="text" name="${element.name}" class="date_time" value="${element.value}" />
                     </div>
                 {{/if}}
             {{/each}}

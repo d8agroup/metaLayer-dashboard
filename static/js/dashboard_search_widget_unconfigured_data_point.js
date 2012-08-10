@@ -145,6 +145,14 @@
                 );
             dashboard_unconfigured_data_point.html(unconfigured_data_point_html);
             dashboard_unconfigured_data_point.find('.cancel, .save, .api_key_link, .file_upload_link').button();
+            dashboard_unconfigured_data_point.find('.multiple_select').multiselect({
+                selectedText: "# of # selected"
+            });
+            dashboard_unconfigured_data_point.find('select').not('.multiple_select').multiselect({
+                multiple:false,
+                selectedList:1
+            });
+            dashboard_unconfigured_data_point.find('.date_time').datepicker();
             dashboard_unconfigured_data_point.find('.api_key_link').click
                 (
                     function()
