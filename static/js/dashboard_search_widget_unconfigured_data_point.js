@@ -121,7 +121,8 @@
             };
             var dashboard_unconfigured_data_point = this;
             var data_point = dashboard_unconfigured_data_point.data('data_point');
-            var unconfigured_data_point_html = $.tmpl('dashboard_unconfigured_data_point', data_point);
+            var data_point_with_mapped_option_groups = map_option_groups(data_point);
+            var unconfigured_data_point_html = $.tmpl('dashboard_unconfigured_data_point', data_point_with_mapped_option_groups);
             unconfigured_data_point_html.find('.cancel').click
                 (
                     function(event) { cancel_button_click_function(event, dashboard_unconfigured_data_point, data_point); }
