@@ -32,6 +32,10 @@
 
                 $('#oauth2_credentials_store').data('store', oauth2_credentials_store);
 
+                $.post('/dashboard/data_points/oauth2/persist_store',
+                    { oauth_credentials_store:JSON.stringify(oauth2_credentials_store),
+                        csrfmiddlewaretoken:$('#csrf_form input').val() });
+
                 dashboard_unconfigured_data_point.dashboard_unconfigured_data_point('render_waiting');
                 $.post('/dashboard/data_points/oauth2/check_credentials',
                     {

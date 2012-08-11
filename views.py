@@ -13,6 +13,7 @@ from metalayercore.actions.controllers import ActionController
 from metalayercore.aggregator.controllers import AggregationController
 from metalayercore.datapoints.controllers import DataPointController
 from logger import Logger
+from metalayercore.oauth2bridge.controllers import Oauth2Controller
 from metalayercore.outputs.controllers import OutputController
 from metalayercore.search.controllers import SearchController
 from metalayercore.dashboards.controllers import DashboardsController
@@ -54,6 +55,12 @@ def dashboard_load(request, id):
     api_keys = json.dumps(api_keys)
 
     try:
+        user_id = request.user.id
+        oauth_credentials_store = Oauth2Controller.RetrieveCredentialsStore(user_id) or ''
+    except Exception:
+        oauth_credentials_store = ''
+
+    try:
         additional_page_includes = getattr(settings, 'ADDITIONAL_PAGE_INCLUDES')
         additional_html = ''.join([render_to_string(page) for page in additional_page_includes])
     except AttributeError:
@@ -70,6 +77,7 @@ def dashboard_load(request, id):
             'dashboard_id':db['id'],
             'INSIGHT_CATEGORIES':settings.INSIGHT_CATEGORIES,
             'api_keys': api_keys,
+            'oauth_credentials_store':oauth_credentials_store,
             'static_host':settings.STATIC_HOST,
             'debug':'on' if settings.DEBUG else 'off',
             'timestamp': stats_assets_refresh_timestamp,
@@ -174,6 +182,13 @@ def dashboard_oauth_authenticate(request):
     dpc = DataPointController({'type':data_point_type, 'id':data_point_id})
     redirect_url = dpc.get_oauth_authenticate_url()
     return HttpResponseRedirect(redirect_url)
+
+@login_required(login_url='/')
+def dashboard_oauth_persist_store(request):
+    store_json = request.POST['oauth_credentials_store']
+    user_id = request.user.id
+    Oauth2Controller.PersistCredentialsStore(user_id, store_json)
+    return JSONResponse()
 
 @login_required(login_url='/')
 def dashboard_remove_data_point(request):
