@@ -134,9 +134,15 @@ def dashboard_validate_data_point(request):
     if not passed:
         Logger.Info('%s - dashboard_validate_data_point - finished' % __name__)
         return JSONResponse({'passed':passed, 'errors':errors})
+    updated_data_point = dpc.perform_post_validation_configuration_changes()
     configured_display_name = dpc.get_configured_display_name()
-    return JSONResponse({'passed':passed, 'errors':errors, 'configured_display_name':configured_display_name})
+    return JSONResponse({
+        'passed':passed,
+        'errors':errors,
+        'configured_display_name':configured_display_name,
+        'updated_data_point':updated_data_point})
 
+@login_required(login_url='/')
 def dashboard_data_point_oauth_credentials_are_valid(request):
     credentials_json = request.POST.get('credentials')
     data_point = request.POST['data_point']
@@ -152,7 +158,7 @@ def dashboard_data_point_oauth_credentials_are_valid(request):
         return_data['data_point'] = data_point
     return JSONResponse(return_data)
 
-
+@login_required(login_url='/')
 def dashboard_data_point_oauth_poll_for_new_credentials(request):
     data_point = request.POST['data_point']
     data_point = json.loads(data_point)

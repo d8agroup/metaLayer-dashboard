@@ -13,41 +13,111 @@
         },
         render:function()
         {
+            var update_base_search_start_and_end_time = function(current_start_and_end_time, data_points) {
+                var current_base_end_time = current_start_and_end_time.search_end_time;
+                var current_base_start_time = current_start_and_end_time.search_start_time;
+                if (current_base_end_time == '*' && current_base_start_time == '*')
+                    return {base_end_time:'*', base_start_time:'*'};
+                var start_times = [];
+                var end_times = [];
+                for (var x=0; x<data_points.length; x++)
+                    if (data_points[x].configured)
+                        for (var y=0; y<data_points[x].elements.length; y++)
+                            if (data_points[x].elements[y].name == 'start_time')
+                                start_times.push(data_points[x].elements[y].value);
+                            else if (data_points[x].elements[y].name == 'end_time')
+                                end_times.push(data_points[x].elements[y].value);
+
+                if (start_times.length == 0 && end_times.length == 0)
+                    return { base_end_time:current_base_end_time, base_start_time:current_base_start_time };
+
+                start_times.push(current_base_start_time);
+                var new_base_start_time = null;
+                if ($.inArray('*', start_times) > -1)
+                    new_base_start_time = '*';
+                else
+                    $.each(start_times, function(i, start_time){
+                        var start_time_int = parseInt(start_time);
+                        if(!isNaN(start_time_int))
+                            if (new_base_start_time == null || start_time_int < new_base_start_time)
+                                new_base_start_time = start_time_int;
+                    });
+
+                end_times.push(current_base_end_time);
+                var new_base_end_time = null;
+                if ($.inArray('*', end_times) > -1)
+                    new_base_end_time = '*';
+                else
+                    $.each(end_times, function(i, end_time){
+                        var end_time_int = parseInt(end_time);
+                        if(!isNaN(end_time_int))
+                            if (new_base_end_time == null || end_time_int > new_base_end_time)
+                                new_base_end_time = end_time_int;
+                    });
+
+                return { base_end_time:new_base_end_time.toString(), base_start_time:new_base_start_time.toString() };
+            };
+
             var dashboard_search_widget = this;
             var configuration = dashboard_search_widget.data('configuration');
-            if (configuration.base_search_configuration == null){
-                configuration.base_search_configuration = {};}
-            var base_start_time = null;
-            for (var x=0; x<configuration.data_points.length; x++){
-                for (var y=0; y<configuration.data_points[x].elements.length; y++){
-                    //Calculate the base start and end time for this collection search based on the data points
-                    if (configuration.data_points[x].elements[y].name == 'start_time')
-                    {
-                        var new_value = configuration.data_points[x].elements[y].value;
-                        if (base_start_time == null)
-                            base_start_time = new_value;
-                        else 
-                            if (new_value == '*' || (base_start_time != '*' && new_value < base_start_time))
-                                    base_start_time = new_value;
-                    }
-                }
-            }
-            configuration.base_search_configuration.search_start_time = (base_start_time != null) ? base_start_time : ((new Date().valueOf() * 0.001)|0) - 7200;
-            var base_end_time = null;
-            for (var x=0; x<configuration.data_points.length; x++)
-                for (var y=0; y<configuration.data_points[x].elements.length; y++)
-                    if (configuration.data_points[x].elements[y].name == 'end_time')
-                    {
-                        var new_value = configuration.data_points[x].elements[y].value;
-                        if (base_end_time == null)
-                            base_end_time = new_value;
-                        else 
-                            if (new_value == '*' || (base_end_time != '*' && new_value > base_end_time))
-                                    base_end_time = new_value;
-                    }
-            configuration.base_search_configuration.search_end_time = (base_end_time != null) ? base_end_time : '*';
-            if (configuration.search_filters.time == null)
-                configuration.search_filters.time = '[' + configuration.base_search_configuration.search_start_time + '%20TO%20' + configuration.base_search_configuration.search_end_time + ']';
+            if (configuration.base_search_configuration == null)
+                configuration.base_search_configuration = {
+                    search_start_time:null,
+                    search_end_time:null
+                };
+
+            var updated_base_search_times = update_base_search_start_and_end_time(
+                configuration.base_search_configuration,
+                configuration.data_points);
+
+            configuration.base_search_configuration.search_start_time = updated_base_search_times.base_start_time;
+            configuration.base_search_configuration.search_end_time = updated_base_search_times.base_end_time;
+
+            if (configuration.search_filters.time == null && configuration.base_search_configuration.search_start_time != null && configuration.base_search_configuration.search_end_time != null)
+                configuration.search_filters.time = '[' +
+                    configuration.base_search_configuration.search_start_time +
+                    '%20TO%20' + configuration.base_search_configuration.search_end_time + ']';
+
+
+
+
+//            var base_start_time = null;
+//            for (var x=0; x<configuration.data_points.length; x++){
+//                if (!configuration.data_points[x].configured)
+//                    continue;
+//
+//                for (var y=0; y<configuration.data_points[x].elements.length; y++){
+//                    //Calculate the base start and end time for this collection search based on the data points
+//                    if (configuration.data_points[x].elements[y].name == 'start_time')
+//                    {
+//                        var new_value = configuration.data_points[x].elements[y].value;
+//                        if (base_start_time == null)
+//                            base_start_time = new_value;
+//                        else
+//                            if (new_value == '*' || (base_start_time != '*' && new_value < base_start_time))
+//                                    base_start_time = new_value;
+//                    }
+//                }
+//            }
+//            configuration.base_search_configuration.search_start_time = (base_start_time != null) ? base_start_time : null;
+//            var base_end_time = null;
+//            for (var x=0; x<configuration.data_points.length; x++) {
+//                if (!configuration.data_points[x].configured)
+//                    continue;
+//
+//                for (var y=0; y<configuration.data_points[x].elements.length; y++)
+//                    if (configuration.data_points[x].elements[y].name == 'end_time')
+//                    {
+//                        var new_value = configuration.data_points[x].elements[y].value;
+//                        if (base_end_time == null)
+//                            base_end_time = new_value;
+//                        else
+//                            if (new_value == '*' || (base_end_time != '*' && new_value > base_end_time))
+//                                    base_end_time = new_value;
+//                    }
+//            }
+//            configuration.base_search_configuration.search_end_time = (base_end_time != null) ? base_end_time : null;
+//            configuration.search_filters.time = '[' + configuration.base_search_configuration.search_start_time + '%20TO%20' + configuration.base_search_configuration.search_end_time + ']';
 
 
             dashboard_search_widget.children().remove();

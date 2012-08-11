@@ -74,8 +74,10 @@
                     if (passed)
                     {
                         remove_waiting(container);
+                        var updated_data_point = data.updated_data_point;
                         data_point['configured'] = true;
                         data_point['configured_display_name'] = data.configured_display_name;
+                        data_point.elements = updated_data_point.elements;
                         var data_points = container.parents('.search_widget').data('configuration').data_points;
                         for (var x=0; x<data_points.length; x++)
                             if (data_points[x].id == data_point.id)
