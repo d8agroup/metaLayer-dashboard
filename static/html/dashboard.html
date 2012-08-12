@@ -93,7 +93,7 @@
     <form id='csrf_form'>
         {% csrf_token %}
     </form>
-    <div class="hidden" id="oauth2_credentials_store" data-store='{{ oauth_credentials_store|safe }}'></div>
+    <div class="hidden" id="oauth2_credentials_store" data-store=''></div>
     {% include 'thedashboard/header/header.html' with context='dashboard' %}
     <div id="page_container">
         <div id='page' data-username='{{ user.username }}'>

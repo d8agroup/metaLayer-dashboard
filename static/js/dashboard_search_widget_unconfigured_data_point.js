@@ -168,18 +168,16 @@
             return this;
         },
         render_oauth_authenticate:function(authorization_url){
-            var dashboard_unconfigured_data_point = this;
-            var data_point = dashboard_unconfigured_data_point.data('data_point');
-            var unconfigured_data_point_html = $.tmpl('dashboard_unconfigured_data_point_oauth', {data_point:data_point, authorization_url:authorization_url});
-            dashboard_unconfigured_data_point.html(unconfigured_data_point_html);
-            dashboard_unconfigured_data_point.find('.button').button().click(function(){
-                dashboard_unconfigured_data_point.dashboard_unconfigured_data_point('render_waiting');
-                setTimeout(function(){
-                    $.post('/dashboard/data_points/oauth2/poll_for_new_credentials',
-                        { data_point:JSON.stringify(data_point), csrfmiddlewaretoken:$('#csrf_form input').val() },
-                        function(data){
-                            var enhanced_data_point = data.data_point;
+            var poll_for_credentials = function(data_point){
+                $.post('/dashboard/data_points/oauth2/poll_for_new_credentials',
+                    { data_point:JSON.stringify(data_point), csrfmiddlewaretoken:$('#csrf_form input').val() },
+                    function(data){
+                        var enhanced_data_point = data.data_point;
 
+                        if (enhanced_data_point == null) {
+                            setTimeout(function() {poll_for_credentials(data_point) }, 1000);
+                        }
+                        else {
                             //store the correct credentials in the store
                             var oauth2_credentials = null;
                             for (var x=0; x<enhanced_data_point.elements.length; x++)
@@ -190,8 +188,17 @@
                             dashboard_unconfigured_data_point.data('data_point', enhanced_data_point);
                             dashboard_unconfigured_data_point.dashboard_unconfigured_data_point('render');
                         }
-                    )
-                }, 1500);
+                    }
+                );
+            };
+
+            var dashboard_unconfigured_data_point = this;
+            var data_point = dashboard_unconfigured_data_point.data('data_point');
+            var unconfigured_data_point_html = $.tmpl('dashboard_unconfigured_data_point_oauth', {data_point:data_point, authorization_url:authorization_url});
+            dashboard_unconfigured_data_point.html(unconfigured_data_point_html);
+            dashboard_unconfigured_data_point.find('.button').button().click(function(){
+                dashboard_unconfigured_data_point.dashboard_unconfigured_data_point('render_waiting');
+                poll_for_credentials(data_point);
             });
 
             return this;

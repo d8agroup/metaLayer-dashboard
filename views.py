@@ -172,8 +172,10 @@ def dashboard_data_point_oauth_poll_for_new_credentials(request):
     data_point = json.loads(data_point)
     dpc = DataPointController(data_point)
     data_point_with_credentials = dpc.oauth_poll_for_new_credentials()
-    dpc = DataPointController(data_point_with_credentials)
-    enhanced_data_point = dpc.update_data_point_with_oauth_dependant_config()
+    enhanced_data_point = None
+    if data_point_with_credentials:
+        dpc = DataPointController(data_point_with_credentials)
+        enhanced_data_point = dpc.update_data_point_with_oauth_dependant_config()
     return JSONResponse({'data_point':enhanced_data_point})
 
 def dashboard_oauth_authenticate(request):
