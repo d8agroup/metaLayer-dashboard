@@ -36,7 +36,7 @@
                     { oauth_credentials_store:JSON.stringify(oauth2_credentials_store),
                         csrfmiddlewaretoken:$('#csrf_form input').val() });
 
-                dashboard_unconfigured_data_point.dashboard_unconfigured_data_point('render_waiting');
+                dashboard_unconfigured_data_point.dashboard_unconfigured_data_point('render_waiting', { message: 'Waiting for authorization'});
                 $.post('/dashboard/data_points/oauth2/check_credentials',
                     {
                         data_point:JSON.stringify(data_point),
@@ -88,16 +88,14 @@
                             if (data_points[x].id == data_point.id)
                                 data_points[x] = data_point;
                         var actions = container.parents('.collection_container').data('configuration').actions;
-                        $.post
-                            (
-                                '/dashboard/data_points/add_data_point_with_actions',
-                                {
-                                    data_point:JSON.stringify(data_point),
-                                    actions:JSON.stringify(actions),
-                                    csrfmiddlewaretoken:$('#csrf_form input').val()
-                                }
-                            );
-                        container.parents('.search_widget').dashboard_search_widget('render');
+                        $.post('/dashboard/data_points/add_data_point_with_actions',{
+                            data_point:JSON.stringify(data_point),
+                            actions:JSON.stringify(actions),
+                            csrfmiddlewaretoken:$('#csrf_form input').val()},
+                            function(){
+                                setTimeout(function(){container.parents('.search_widget').dashboard_search_widget('render');}, 1000);
+                            });
+                        container.dashboard_unconfigured_data_point('render_waiting', { message:'Waiting for results' });
                     }
                     else
                     {
@@ -161,10 +159,11 @@
             });
             return dashboard_unconfigured_data_point
         },
-        render_waiting:function(){
+        render_waiting:function(data){
             var dashboard_unconfigured_data_point = this;
             var data_point = dashboard_unconfigured_data_point.data('data_point');
-            var unconfigured_data_point_html = $.tmpl('dashboard_unconfigured_data_point_waiting', data_point);
+            var message = data.message;
+            var unconfigured_data_point_html = $.tmpl('dashboard_unconfigured_data_point_waiting', { data_point:data_point, message:message});
             dashboard_unconfigured_data_point.html(unconfigured_data_point_html);
             return this;
         },
@@ -198,7 +197,7 @@
             var unconfigured_data_point_html = $.tmpl('dashboard_unconfigured_data_point_oauth', {data_point:data_point, authorization_url:authorization_url});
             dashboard_unconfigured_data_point.html(unconfigured_data_point_html);
             dashboard_unconfigured_data_point.find('.button').button().click(function(){
-                dashboard_unconfigured_data_point.dashboard_unconfigured_data_point('render_waiting');
+                dashboard_unconfigured_data_point.dashboard_unconfigured_data_point('render_waiting', { message: 'Waiting for authorization'});
                 poll_for_credentials(data_point);
             });
 
