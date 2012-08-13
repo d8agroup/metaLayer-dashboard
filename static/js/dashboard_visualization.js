@@ -99,25 +99,27 @@
                 {
                     var dimension = visualization.data_dimensions[d];
                     dimension.values = [];
+
+                    //If this is not the first dimension, add a None at the beginning
+                    if (d > 0) dimension.values[0] = { name:'None', value:null, type:null };
+
+                    //Cycle through all the actions applied to this search widget looking for values that can be graphed
                     var dimension_types = dimension.type;
-//                    OLD Code supporting total count graphs - to be removed
-//                    if (dimension_type == 'int')
-//                        dimension.values[dimension.values.length] = { name:'Total Count', value:'total_count' };
                     for (var a=0; a<configuration.actions.length; a++)
                         if (configuration.actions[a].content_properties.added != null)
                             for (var cp=0; cp<configuration.actions[a].content_properties.added.length; cp++)
                                 if($.inArray(configuration.actions[a].content_properties.added[cp].type, dimension_types) > -1)
-                                    dimension.values[dimension.values.length] =
-                                    {
+                                    dimension.values[dimension.values.length] = {
                                         name:configuration.actions[a].content_properties.added[cp].display_name,
-                                        value:search_encode_property
-                                            (
-                                                configuration.actions[a].name,
-                                                configuration.actions[a].content_properties.added[cp].name,
-                                                configuration.actions[a].content_properties.added[cp].type
-                                            ),
+                                        value:search_encode_property(
+                                            configuration.actions[a].name,
+                                            configuration.actions[a].content_properties.added[cp].name,
+                                            configuration.actions[a].content_properties.added[cp].type
+                                        ),
                                         type:configuration.actions[a].content_properties.added[cp].type
                                     };
+
+                    //Cycle through all the data points in this search widget looking for values that can be graphed
                     for (var b=0; b<configuration.data_points.length; b++)
                         if (configuration.data_points[b].configured && configuration.data_points[b].meta_data != null)
                             for (var ex=0; ex<configuration.data_points[b].meta_data.length; ex++)
@@ -128,7 +130,8 @@
                                         type:configuration.data_points[b].meta_data[ex].type
                                     };
 
-                    var un_duped_dimension_values = []
+                    //Dedupe any duplicate values
+                    var un_duped_dimension_values = [];
                     for (var dv=0; dv<dimension.values.length; dv++) {
                         var should_be_added = true;
                         for (var ud=0; ud<un_duped_dimension_values.length; ud++)
