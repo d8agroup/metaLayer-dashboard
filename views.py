@@ -13,6 +13,7 @@ from metalayercore.actions.controllers import ActionController
 from metalayercore.aggregator.controllers import AggregationController
 from metalayercore.datapoints.controllers import DataPointController
 from logger import Logger
+from metalayercore.oauth2bridge.controllers import Oauth2Controller
 from metalayercore.outputs.controllers import OutputController
 from metalayercore.search.controllers import SearchController
 from metalayercore.dashboards.controllers import DashboardsController
@@ -54,6 +55,12 @@ def dashboard_load(request, id):
     api_keys = json.dumps(api_keys)
 
     try:
+        user_id = request.user.id
+        oauth_credentials_store = Oauth2Controller.RetrieveCredentialsStore(user_id) or ''
+    except Exception:
+        oauth_credentials_store = ''
+
+    try:
         additional_page_includes = getattr(settings, 'ADDITIONAL_PAGE_INCLUDES')
         additional_html = ''.join([render_to_string(page) for page in additional_page_includes])
     except AttributeError:
@@ -70,6 +77,7 @@ def dashboard_load(request, id):
             'dashboard_id':db['id'],
             'INSIGHT_CATEGORIES':settings.INSIGHT_CATEGORIES,
             'api_keys': api_keys,
+            'oauth_credentials_store':oauth_credentials_store,
             'static_host':settings.STATIC_HOST,
             'debug':'on' if settings.DEBUG else 'off',
             'timestamp': stats_assets_refresh_timestamp,
@@ -134,9 +142,15 @@ def dashboard_validate_data_point(request):
     if not passed:
         Logger.Info('%s - dashboard_validate_data_point - finished' % __name__)
         return JSONResponse({'passed':passed, 'errors':errors})
+    updated_data_point = dpc.perform_post_validation_configuration_changes()
     configured_display_name = dpc.get_configured_display_name()
-    return JSONResponse({'passed':passed, 'errors':errors, 'configured_display_name':configured_display_name})
+    return JSONResponse({
+        'passed':passed,
+        'errors':errors,
+        'configured_display_name':configured_display_name,
+        'updated_data_point':updated_data_point})
 
+@login_required(login_url='/')
 def dashboard_data_point_oauth_credentials_are_valid(request):
     credentials_json = request.POST.get('credentials')
     data_point = request.POST['data_point']
@@ -152,14 +166,16 @@ def dashboard_data_point_oauth_credentials_are_valid(request):
         return_data['data_point'] = data_point
     return JSONResponse(return_data)
 
-
+@login_required(login_url='/')
 def dashboard_data_point_oauth_poll_for_new_credentials(request):
     data_point = request.POST['data_point']
     data_point = json.loads(data_point)
     dpc = DataPointController(data_point)
     data_point_with_credentials = dpc.oauth_poll_for_new_credentials()
-    dpc = DataPointController(data_point_with_credentials)
-    enhanced_data_point = dpc.update_data_point_with_oauth_dependant_config()
+    enhanced_data_point = None
+    if data_point_with_credentials:
+        dpc = DataPointController(data_point_with_credentials)
+        enhanced_data_point = dpc.update_data_point_with_oauth_dependant_config()
     return JSONResponse({'data_point':enhanced_data_point})
 
 def dashboard_oauth_authenticate(request):
@@ -168,6 +184,13 @@ def dashboard_oauth_authenticate(request):
     dpc = DataPointController({'type':data_point_type, 'id':data_point_id})
     redirect_url = dpc.get_oauth_authenticate_url()
     return HttpResponseRedirect(redirect_url)
+
+@login_required(login_url='/')
+def dashboard_oauth_persist_store(request):
+    store_json = request.POST['oauth_credentials_store']
+    user_id = request.user.id
+    Oauth2Controller.PersistCredentialsStore(user_id, store_json)
+    return JSONResponse()
 
 @login_required(login_url='/')
 def dashboard_remove_data_point(request):
@@ -288,7 +311,8 @@ def dashboard_run_visualization(request):
     content = vc.render_javascript_visualization_for_search_results_collection(search_results_collection, configuration)
     content_type = 'text/javascript; charset=UTF-8'
     Logger.Info('%s - dashboard_run_visualization - finished' % __name__)
-    return HttpResponse(content=content, content_type=content_type)
+    response = HttpResponse(content=content, content_type=content_type)
+    return response
 
 def dashboard_run_search(request):
     Logger.Info('%s - dashboard_run_search - started' % __name__)

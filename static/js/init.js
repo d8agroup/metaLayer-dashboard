@@ -187,6 +187,42 @@ function render_dynamic_content_item_actions_and_extensions(data) {
     return html;
 }
 
+function map_option_groups(data_point) {
+    for (var x=0; x<data_point.elements.length; x++) {
+        if (data_point.elements[x].type == 'multiple_select') {
+            var values = data_point.elements[x].values;
+            var option_groups = null;
+            for (var y=0; y<values.length; y++){
+                if (values[y].option_group != null){
+                    if (option_groups == null)
+                        option_groups = {};
+                    if (option_groups[values[y].option_group] == null)
+                        option_groups[values[y].option_group] = [];
+                    option_groups[values[y].option_group].push(values[y]);
+                }
+            }
+            var option_groups_array = [];
+            if (option_groups != null) {
+                for (var key in option_groups) {
+                    var option_group = {
+                        name:key,
+                        options:option_groups[key]
+                    };
+                    option_groups_array.push(option_group);
+                }
+            }
+            else {
+                option_groups_array.push({
+                    name:null,
+                    options:values
+                });
+            }
+            data_point.elements[x].values = option_groups_array;
+        }
+    }
+    return data_point;
+}
+
 $(document).ready
 (
     function()

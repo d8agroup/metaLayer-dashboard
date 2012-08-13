@@ -1,5 +1,5 @@
 <div class='data_point_config' data-data_point_id='${id}'>
-    <div class='image_and_title'>
+    <div class='image_and_title collection_drag_handle'>
         <img src='${image_small}' />
         <h3>${full_display_name}</h3>
     </div>
@@ -30,10 +30,21 @@
                         <label>${element.display_name}</label>
                         <div class="select_container">
                             <select name='${element.name}' class="${element.name} multiple_select" multiple="multiple">
-                                {{each(index, option) element.values}}
-                                    <option value="${option.value}">${option.name}</option>
+                                {{each(index, option_group) element.values}}
+                                    {{if option_group.name == null}}
+                                        {{each(index, option) option_group.options}}
+                                            <option value="${option.value}">${option.name}</option>
+                                        {{/each}}
+                                    {{/if}}
+                                    {{if option_group.name != null}}
+                                        <optgroup label="${option_group.name}">
+                                            {{each(index, option) option_group.options}}
+                                                <option value="${option.value}">${option.name}</option>
+                                            {{/each}}
+                                        </optgroup>
+                                    {{/if}}
                                 {{/each}}
-                            </select>
+                        </select>
                         </div>
                     </div>
                 {{/if}}
@@ -62,7 +73,7 @@
                 {{if element.type == 'date_time'}}
                     <div class="form_row">
                         <label>${element.display_name}</label>
-                        <input type="text" name="${element.name}" class="date_time" value="${element.value}" />
+                        <input type="text" name="${element.name}" class="date_time ${element.name}" value="${element.value}" />
                     </div>
                 {{/if}}
             {{/each}}
