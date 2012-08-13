@@ -169,7 +169,13 @@
                     search_widget.find('.search_results_container').jScrollPane( { topCapHeight:40, bottomCapHeight:40 } );
                     search_widget.dashboard_search_widget('remove_waiting');
                     search_widget.parents('.collection_container').dashboard_collection('search_results_updated');
-                    setTimeout(function() { run_search_at_interval_function(search_widget) }, 30000);
+
+                    var should_run_search_at_intervals = false;
+                    for(var x=0; x<configuration.data_points.length; x++)
+                        if (configuration.data_points[x].is_live)
+                            should_run_search_at_intervals = true;
+                    if (should_run_search_at_intervals)
+                        setTimeout(function() { run_search_at_interval_function(search_widget) }, 30000);
                 };
 
                 var configuration = search_widget.data('configuration');
