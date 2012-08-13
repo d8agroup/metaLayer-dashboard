@@ -73,7 +73,7 @@
                 {{if element.type == 'date_time'}}
                     <div class="form_row">
                         <label>${element.display_name}</label>
-                        <input type="text" name="${element.name}" class="date_time" value="${element.value}" />
+                        <input type="text" name="${element.name}" class="date_time ${element.name}" value="${element.value}" />
                     </div>
                 {{/if}}
             {{/each}}
