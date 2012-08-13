@@ -158,27 +158,29 @@
                 var configuration = visualization_container.parents('.collection_container').data('configuration');
                 var timestamp = new Date;
                 timestamp = timestamp.getTime();
-                $.ajax
-                    (
-                        {
-                            async:true,
-                            type:'POST',
-                            url:'/dashboard/visualizations/run_visualization/' + timestamp,
-                            data:
-                            {
-                                visualization:JSON.stringify(visualization),
-                                data_points:JSON.stringify(configuration.data_points),
-                                search_filters:JSON.stringify(configuration.search_filters),
-                                csrfmiddlewaretoken:$('#csrf_form input').val()
-                            },
-                            dataType:'script'
+                $.ajax({
+                    async:true,
+                    type:'POST',
+                    url:'/dashboard/visualizations/run_visualization/' + timestamp,
+                    data:{
+                        visualization:JSON.stringify(visualization),
+                        data_points:JSON.stringify(configuration.data_points),
+                        search_filters:JSON.stringify(configuration.search_filters),
+                        csrfmiddlewaretoken:$('#csrf_form input').val()
+                    },
+                    dataType:'script',
+                    success:function(data, textStatus, jqXHR){
+                        var id_strings = /v_\w+/.exec(data);
+                        if(id_strings.length > 0) {
+                            var id = id_strings[0];
+                            setTimeout(function(){
+                                $('#' + id).parents('.visualization_container').find('.loading').hide();
+                                $('#' + id).parents('.visualizations_container').dashboard_visualizations('capture_snapshots');
+                            }, 1000);
                         }
-                    );
+                    }
+                });
                 visualization_html.find('.config').click(function(e) { configure_button_clicked(e, visualization_container, visualization.id); });
-                setTimeout(function(){
-                    visualization_html.find('.loading').hide()
-                    visualization_html.parents('.visualizations_container').dashboard_visualizations('capture_snapshots');
-                }, 5000);
                 return visualization_container;
             }
         }

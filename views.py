@@ -311,7 +311,8 @@ def dashboard_run_visualization(request):
     content = vc.render_javascript_visualization_for_search_results_collection(search_results_collection, configuration)
     content_type = 'text/javascript; charset=UTF-8'
     Logger.Info('%s - dashboard_run_visualization - finished' % __name__)
-    return HttpResponse(content=content, content_type=content_type)
+    response = HttpResponse(content=content, content_type=content_type)
+    return response
 
 def dashboard_run_search(request):
     Logger.Info('%s - dashboard_run_search - started' % __name__)
