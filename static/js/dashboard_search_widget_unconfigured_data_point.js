@@ -36,11 +36,17 @@
                     { oauth_credentials_store:JSON.stringify(oauth2_credentials_store),
                         csrfmiddlewaretoken:$('#csrf_form input').val() });
 
+                var oauth_credentials = '';
+                for (var x=0; x<data_point.elements.length; x++)
+                    if (data_point.elements[x].name == 'oauth2')
+                        oauth2_credentials = data_point.elements[x].value;
+
+
                 dashboard_unconfigured_data_point.dashboard_unconfigured_data_point('render_waiting', { message: 'Waiting for authorization'});
                 $.post('/dashboard/data_points/oauth2/check_credentials',
                     {
                         data_point:JSON.stringify(data_point),
-                        credentials:oauth2_credentials_store.data_points[data_point_type],
+                        credentials:oauth2_credentials, //oauth2_credentials_store.data_points[data_point_type],
                         csrfmiddlewaretoken:$('#csrf_form input').val()
                     },
                     function(data){
