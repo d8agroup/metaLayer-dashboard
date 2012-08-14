@@ -82,6 +82,7 @@
                         data_point['configured'] = true;
                         data_point['configured_display_name'] = data.configured_display_name;
                         data_point.elements = updated_data_point.elements;
+                        data_point.meta_data = updated_data_point.meta_data;
 
                         var data_points = container.parents('.search_widget').data('configuration').data_points;
                         for (var x=0; x<data_points.length; x++)
