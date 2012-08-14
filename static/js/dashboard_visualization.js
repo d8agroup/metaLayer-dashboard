@@ -95,13 +95,18 @@
             else if (!visualization.configured)
             {
                 var configuration = visualization_container.parents('.collection_container').data('configuration');
+                var number_of_required_dimensions = (visualization.number_of_required_dimensions != null)
+                    ? visualization.number_of_required_dimensions
+                    : 1;
+
                 for (var d=0; d<visualization.data_dimensions.length; d++)
                 {
                     var dimension = visualization.data_dimensions[d];
-                    dimension.values = [];
+                    if (dimension.values == null)
+                        dimension.values = [];
 
-                    //If this is not the first dimension, add a None at the beginning
-                    if (d > 0) dimension.values[0] = { name:'None', value:null, type:null };
+                    if (d >= number_of_required_dimensions)
+                        dimension.values[0] = { name:'None', value:null, type:null };
 
                     //Cycle through all the actions applied to this search widget looking for values that can be graphed
                     var dimension_types = dimension.type;
@@ -166,6 +171,7 @@
                         visualization:JSON.stringify(visualization),
                         data_points:JSON.stringify(configuration.data_points),
                         search_filters:JSON.stringify(configuration.search_filters),
+                        base_search_configuration:JSON.stringify(configuration.base_search_configuration),
                         csrfmiddlewaretoken:$('#csrf_form input').val()
                     },
                     dataType:'script',

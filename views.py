@@ -303,6 +303,7 @@ def dashboard_run_visualization(request):
     configuration = {
         'data_points':json.loads(request.POST['data_points']),
         'search_filters':json.loads(request.POST['search_filters']),
+        'base_search_configuration':json.loads(request.POST['base_search_configuration']),
     }
     vc = VisualizationController(visualization)
     search_query_additions_collection = vc.get_search_query_additions_collection(configuration)
