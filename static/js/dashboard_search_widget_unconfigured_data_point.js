@@ -19,6 +19,7 @@
             }
             else {
                 //update the oauth2 credentials store
+                /*
                 var data_point_type = data_point.type;
                 var oauth2_credentials_store = $('#oauth2_credentials_store').data('store');
                 if (oauth2_credentials_store == null || oauth2_credentials_store == '')
@@ -35,6 +36,7 @@
                 $.post('/dashboard/data_points/oauth2/persist_store',
                     { oauth_credentials_store:JSON.stringify(oauth2_credentials_store),
                         csrfmiddlewaretoken:$('#csrf_form input').val() });
+                */
 
                 var oauth_credentials = '';
                 for (var x=0; x<data_point.elements.length; x++)
@@ -185,13 +187,14 @@
                             setTimeout(function() {poll_for_credentials(data_point) }, 1000);
                         }
                         else {
+                            /*
                             //store the correct credentials in the store
                             var oauth2_credentials = null;
                             for (var x=0; x<enhanced_data_point.elements.length; x++)
                                 if (enhanced_data_point.elements[x].name == 'oauth2')
                                     oauth2_credentials = enhanced_data_point.elements[x].value;
                             $('#oauth2_credentials_store').data('store').data_points[enhanced_data_point.type] = oauth2_credentials;
-
+                            */
                             dashboard_unconfigured_data_point.data('data_point', enhanced_data_point);
                             dashboard_unconfigured_data_point.dashboard_unconfigured_data_point('render');
                         }
