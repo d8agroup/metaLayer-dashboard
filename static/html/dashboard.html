@@ -48,6 +48,7 @@
     <script type="text/javascript" src="/static/js/thedashboard/on_exit_modal.js?ts={{ timestamp}}"></script>
     <script type="text/javascript" src="/static/js/thedashboard/modal_api_key_manager.js?ts={{ timestamp}}"></script>
     <script type="text/javascript" src="/static/js/thedashboard/modal_data_uploader.js?ts={{ timestamp}}"></script>
+    <script type="text/javascript" src="/static/js/thedashboard/modal_output_report.js?ts={{ timestamp}}"></script>
     <script type="text/javascript">
         EMBEDDED_MODE = false;
         var html_host = '{{ static_host }}';
@@ -129,6 +130,7 @@
             {% include 'thedashboard/modals/on_exit.html' %}
             {% include 'thedashboard/modals/api_key_manager.html' %}
             {% include 'thedashboard/modals/data_uploader.html' %}
+            {% include 'thedashboard/modals/output_report.html' %}
         </div>
     </div>
     {% include 'ga_tracking.html' %}

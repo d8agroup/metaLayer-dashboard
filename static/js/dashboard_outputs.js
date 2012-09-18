@@ -64,10 +64,24 @@
                     )
             }
 
-            dashboard_outputs_container.append(output_html);
-            output_html.find('.remove').click(function(event) {
-                remove_output_function(event, dashboard_outputs_container, output);
-            });
+            if (output.hasOwnProperty('modal') && output.modal == true) {
+                // At least one visualization is required to create a report
+                if (configuration.visualizations.length < 1) {
+                    return;
+                }
+                if ($('#output_report').is(':hidden')) {
+                    $('#output_report').modal_output_report('open', {
+                        output: output,
+                        container: dashboard_outputs_container,
+                        remove_callback: remove_output_function
+                    });
+                }
+            } else {
+                dashboard_outputs_container.append(output_html);
+                output_html.find('.remove').click(function(event) {
+                    remove_output_function(event, dashboard_outputs_container, output);
+                });
+            }
         }
     };
 })( jQuery );
