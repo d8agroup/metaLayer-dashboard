@@ -175,9 +175,14 @@ function render_dynamic_content_item_actions_and_extensions(data) {
             continue;
 
         var value = data[key];
-        var value_as_string = '';
-        for (var x=0; x<value.length; x++)
-            value_as_string += value[x];
+        if (isNaN(value)) {
+            var value_as_string = '';
+            for (var x=0; x<value.length; x++)
+                value_as_string += value[x];
+        }
+        else {
+            value_as_string = value.toString();
+        }
         value_as_string = truncate_characters_with_mouseover(value_as_string, 70);
         html += template.replace(/DISPLAY_NAME/g, display_name)
             .replace(/FACET_NAME/g, key)
