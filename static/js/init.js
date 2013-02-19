@@ -77,7 +77,12 @@ function clean_user_generated_html(element)
 }
 
 function strip_html(text) {
-    return text != null ? text.replace(/<(?:.|\n)*?>/gm, '') : '';
+    if (text == null)
+        return '';
+    var all_text = '';
+    for (var x=0; x<text.length; x++)
+        all_text += text[x];
+    return all_text.replace(/<(?:.|\n)*?>/gm, '');
 }
 
 function search_encode_property(action_name, property_name, property_type)
